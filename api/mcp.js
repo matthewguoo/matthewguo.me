@@ -267,7 +267,26 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Expose-Headers', 'Mcp-Session-Id, MCP-Protocol-Version');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method === 'DELETE') return res.status(200).end();
-  if (req.method === 'GET') return res.status(405).json({ name: SERVER.name, transport: 'streamable-http', hint: 'POST JSON-RPC 2.0 here. Tools: about, experience, capabilities, search, projects, links, availability, request_call, contact.' });
+  if (req.method === 'GET' || req.method === 'HEAD') {
+    const desc = {
+      name: SERVER.name, version: SERVER.version, transport: 'streamable-http', endpoint: 'https://matthewguo.me/mcp', auth: 'none',
+      description: `MCP server for Matthew Guo's personal site. It answers questions about him (bio, work history, a hierarchical capability tree, projects) and takes two actions on a user's behalf: request a call and send him a message.`,
+      how_to_connect: { claude: 'Settings -> Connectors -> Add custom connector -> paste the endpoint', claude_code: 'claude mcp add --transport http matthewguo https://matthewguo.me/mcp', cursor: '{"mcpServers":{"matthewguo":{"url":"https://matthewguo.me/mcp"}}}', codex: 'codex mcp add matthewguo --url https://matthewguo.me/mcp', vscode: `code --add-mcp '{"name":"matthewguo","type":"http","url":"https://matthewguo.me/mcp"}'` },
+      without_mcp: 'The same data is a static file at https://matthewguo.me/profile.json. Contact and scheduling need the MCP tools.',
+      tools: TOOLS.map((t) => ({ name: t.name, description: t.description, input: Object.keys(t.inputSchema.properties || {}) })),
+      resources: 'resources/list exposes profile:// URIs for the same data.',
+      protocol: 'POST JSON-RPC 2.0 (initialize, tools/list, tools/call, resources/list, resources/read, ping) to this URL.',
+    };
+    const accept = String(req.headers.accept || '');
+    if (accept.includes('text/html') && !accept.includes('application/json')) {
+      const esc = (x) => String(x).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+      const rows = desc.tools.map((t) => `<tr><td><code>${esc(t.name)}</code></td><td>${esc(t.description)}</td></tr>`).join('');
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.status(200).end(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>matthewguo.me/mcp</title><link rel="icon" href="/assets/icon-32.png"><style>:root{--sakura:#8e2130;--ink:#1a1a1a;--muted:#555;--bg:#f5f5f5;--line:#1a1a1a24}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 Inter,system-ui,sans-serif;padding:0 28px}body::before{content:"";position:fixed;top:0;left:0;right:0;height:3px;background:var(--sakura)}main{max-width:760px;margin:0 auto;padding:48px 0}h1{font-size:22px;letter-spacing:-.02em;margin:0 0 8px}p{color:var(--muted);margin:0 0 14px}code{font:13px ui-monospace,Menlo,monospace}table{border-collapse:collapse;width:100%;background:#fff;border:1px solid var(--line);font-size:14px}td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:top}td:first-child{white-space:nowrap}a{color:var(--sakura);text-decoration:none}</style></head><body><main><h1>matthewguo.me/mcp</h1><p>${esc(desc.description)} Streamable HTTP, no auth.</p><p>Endpoint: <code>https://matthewguo.me/mcp</code>. Data without MCP: <a href="/profile.json">/profile.json</a>. Site: <a href="/">matthewguo.me</a>.</p><table>${rows}</table><p style="margin-top:14px">Claude Code: <code>claude mcp add --transport http matthewguo https://matthewguo.me/mcp</code></p></main></body></html>`);
+    }
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).end(req.method === 'HEAD' ? '' : JSON.stringify(desc, null, 2));
+  }
   if (req.method !== 'POST') return res.status(405).end();
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { return res.status(400).json(err(null, -32700, 'Parse error')); } }

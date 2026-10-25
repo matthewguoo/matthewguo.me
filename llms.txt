@@ -1,0 +1,9 @@
+# matthewguo.me
+
+Personal site of Matthew Guo, hardware and systems engineer in Mountain View, CA.
+
+- MCP server (Streamable HTTP, no auth): https://matthewguo.me/mcp
+  Tools: about, experience, capabilities (tree; dotted paths), search, projects, links, availability, request_call, contact.
+  GET the endpoint for a JSON description of the tools.
+- Same data as a static file: https://matthewguo.me/profile.json
+- Contact and scheduling only work through the MCP tools.
