@@ -1,57 +1,122 @@
 {
   "name": "Matthew Guo",
-  "summary": "Hardware and systems engineer in Mountain View, California. Carnegie Mellon. Designs dense mixed-signal and FPGA boards, builds the EDA tooling around them, and builds and runs production trading systems with the risk controls to match. Founder of Yaedo Hardware Design (boardmiko.com). Chief Investment Officer at Vosburg Capital.",
+  "headline": "Hardware and systems engineer. Mountain View, CA.",
+  "summary": "Hardware and systems engineer who owns multi-board compute and sensing platforms end to end: architecture and interface definition, schematic and layout, bring-up, cross-domain EE/firmware/mechanical debug on deployed fleets, EMI/SI root cause, and vendor-managed production. Founder of YAEDO Design House (boardmiko.com), a 5 to 10 engineer PCB design firm with its own EDA toolchain. Also builds and runs production trading systems and the risk and research infrastructure around them as Chief Investment Officer of Vosburg Capital.",
   "location": "Mountain View, CA",
-  "education": [{ "school": "Carnegie Mellon University" }],
-  "roles": [
-    { "org": "Yaedo Hardware Design (boardmiko.com)", "role": "Founder and lead engineer", "url": "https://www.boardmiko.com", "note": "Turnkey PCB design at a fixed price: idea, schematic or netlist in; assembled, DRC-clean, fab-ready boards out. Own toolchain on a patched KiCad fork." },
-    { "org": "Vosburg Capital", "role": "Chief Investment Officer", "url": "https://vosburgcapital.com", "note": "Long/short equity in hard technology. Built the firm's research, execution and risk infrastructure from scratch." }
+  "languages_spoken": ["English", "Mandarin (native)"],
+  "experience": [
+    { "org": "Corvus Robotics", "title": "Hardware Engineer", "start": "2025-09", "end": null, "location": "Mountain View, CA", "highlights": [
+      "Sole hardware engineer across multiple platforms; owns a distributed, high-bandwidth multi-board architecture (Intel Core Ultra compute, PCIe/Thunderbolt fabric) for a space-constrained L4 autonomous drone.",
+      "Architects and integrates the perception stack: multi-camera, lidar, optical-flow and inertial sensors, with interface, power and bandwidth budgets across compute, sensor and actuator subsystems including CAN.",
+      "Leads bring-up and cross-domain debug of new platform builds; chases integration faults to root cause and feeds fixes back into requirements and interface specs.",
+      "Designs versioned, fleet-manageable hardware: IQC, provisioning and flashing, revision traceability, field serviceability.",
+      "Root-causes and fixes EMI/SI failures on deployed PCIe and Thunderbolt hardware, often same day; introduced risk-management gates. Manages simulation and validation contractors and domestic and APAC design and EMS partners." ] },
+    { "org": "YAEDO Design House (boardmiko.com)", "title": "Founder and Lead Engineer", "start": "2026-01", "end": null, "location": "Mountain View, CA", "highlights": [
+      "Founded and leads a 5 to 10 engineer PCB design and hardware services firm; owns client scoping, requirements, schedule and delivery across client engineering, non-technical stakeholders and fab and assembly partners.",
+      "Built an automated quoting system that issues a binding, countersigned quote from submitted specs and files, backed by cost and effort models accurate enough to honor without manual review.",
+      "Built the firm's EDA toolchain: a patched KiCad fork with a guarded collaboration API, routers and escape generators, SI/PI review, a benchmarked decoupling placer, and client deliverable sites with fab packs." ] },
+    { "org": "Duke University", "title": "AI Research Intern", "start": "2025-05", "end": "2025-07", "location": "Durham, NC", "highlights": [ "Vision-language model research." ] },
+    { "org": "Botbuilt", "title": "Electrical Engineer", "start": "2024-02", "end": "2025-04", "location": "Durham, NC", "highlights": [
+      "Led all in-house PCB projects (10+ assemblies including IPC Class 3) and a custom NVIDIA Orin carrier that resolved sensor-bandwidth bottlenecks for on-robot AI processing.",
+      "Integrated and debugged controls, power, CAN, wiring and industrial sensing (encoders, laser and optical, safety and specialty sensors) on FANUC and ABB truss-assembly lines; fault-tolerant control architecture and device-scale UPS modules cut controls-related downtime 10x.",
+      "Deployed and managed a fleet of Yocto-based embedded Linux controllers with versioned provisioning, flashing and update workflows.",
+      "Cut subsystem BOM cost 20 percent and assembly time in half via custom modules and contract harness manufacturers; introduced phase-gating, DFM review and HALT/HASS validation." ] },
+    { "org": "Botbuilt", "title": "Mechatronics and Software Intern", "start": "2023-08", "end": "2024-03", "location": "Durham, NC", "highlights": [
+      "Modeled and solved EMI and power-distribution issues on the truss line; introduced CI for embedded firmware with hardware-in-the-loop deployment." ] },
+    { "org": "Vosburg Capital", "title": "Chief Investment Officer", "start": "2026", "end": null, "location": "Mountain View, CA", "highlights": [
+      "Long/short equity in hard technology. Built the firm's research, execution and risk infrastructure from scratch: two broker engines, a pre-registered research program and a parquet data lake." ] }
   ],
-  "headline_capabilities": [
-    "High-layer-count, high-pin-count PCB design: 8-layer boards with 800 to 1000+ placed parts, Kintex-7 FFG676 and Raspberry Pi CM5 class BGAs, 10GBASE-R SFP+, USB 3.2 on transceiver lanes, DDR3, HDMI, eDP, USB-C PD; impedance-controlled stackups and length-matched differential pairs.",
-    "Flex and rigid-flex: 14 production polyimide flex boards (4-layer stackup, coverlay, stiffener, EMI film) for a handheld medical device, generated programmatically from a 2,000-line Python generator that rebuilds byte-identical and length-matches every signal line.",
-    "EDA tooling: an in-house layout environment (about 24k lines) with numba A* single-ended and differential-pair routers, BGA dogbone escape, QFN fan-out, DDR3 plan/route/tune, IPC-2152 current and 3W/5W spacing checks; a benchmarked decoupling placer (8 open-source boards, 21 ICs, zero courtyard overlaps); field-solved impedance, crosstalk and return-path review; finite-difference IR-drop review; a patched KiCad fork with a guarded collaboration API and a routing CLI.",
-    "Deliverable pipelines: a static board site generator (kicad-cli exports, per-layer SVG with cross-probing, 3D GLB, BOM, ERC/DRC, stackup, JLC/CM fab zips with SHA-256 manifests) and a browser workbench that pairs the schematic and board canvas with checks, worklists and an LLM assistant.",
-    "Production trading systems: two broker engines (Alpaca; Interactive Brokers) in Python, FastAPI and TypeScript, about 250k lines with 3,000+ tests. Event-sourced positions, exits on filtered fair value with a mid-to-market price ladder, restart-safe reconciliation against the broker, per-call latency journaling, Black-Scholes P&L attribution, systemd deployment with watchdogs and test-gated auto-deploy.",
-    "Risk management as code: pure-function risk kernels (mypy --strict, no Any) enforcing per-plan loss, daily loss, gross exposure and heartbeat-loss flatten; per-book drawdown budgets; resting catastrophe stops at the broker; persisted fail-closed halts; an operator arm/disarm lever outside the engine; an off-box read-only dead-man's switch whose isolation is tested; nightly Flex statement reconciliation.",
-    "Research discipline: 80+ studies run under written pre-registrations (sha256-pinned), in-sample/holdout splits, placebo and shuffled nulls, Newey-West statistics, and a byte-identical paper rebuild as a regression gate. Roughly 70 percent of studies with a verdict were killed. Data lake of SIP minute bars since 2016 and OPRA options since 2024 in partitioned parquet, plus EDGAR filings with documented SEC timestamp handling.",
-    "LLMs used carefully in production: structured-output-only calls, untrusted text fenced against prompt injection, every call journaled including refusals, model fallback with cooldowns, and the model never places orders. Local models (Qwen3 via llama.cpp) benchmarked as review gates.",
-    "Firmware: bare-metal C++ on STM32L4 (time-of-flight lidar, I2C sensors, resident UART bootloader, RTT), register-level Cortex-M bring-up, SAMD21 PWM control for a 103 kHz inductive charger.",
-    "Breadth: GPU-accelerated backtesting with CuPy and GMM regime models; a broker simulator with 14 fault types and 11 pre-trade safety checks; a discrete-event fleet simulator with unit economics; a Next.js, Prisma, Stripe and Anthropic-API quoting product; a number-theory pipeline in C and PARI/GP that re-certified record-rank elliptic curves and certified a new rank-26+ fiber."
-  ],
+  "education": [ { "school": "Carnegie Mellon University", "program": "B.S. Electrical and Computer Engineering (admitted)", "status": "Enrollment deferred to pursue full-time hardware engineering roles." } ],
+  "capabilities": {
+    "hardware": {
+      "summary": "Board and system design from architecture to production, across compute, sensing, power, RF and flex.",
+      "children": {
+        "interfaces": {
+          "summary": "Electrical interfaces designed, laid out, brought up or debugged on shipped or in-progress hardware.",
+          "children": {
+            "high_speed_serial": { "items": ["PCIe Gen3, Gen4 and Gen5 (topology, layout, EMI/SI root cause on deployed hardware)", "Thunderbolt 4 / USB4 fabric", "USB 3.x including on FPGA GTX transceiver lanes; USB3 RealSense ASIC chip-down", "10GBASE-R over SFP+ (dual) on Kintex-7 GTX", "Gigabit Ethernet", "GMSL and other high-speed camera serial links", "MIPI CSI-2 multi-camera"] },
+            "memory": { "items": ["LPDDR5X (Intel Panther Lake platform)", "DDR5 chip-down (RK3588S compact board)", "DDR3 (Kintex-7 capture board; in-house DDR3 plan/route/tune tooling)", "QSPI flash, eMMC, microSD, M.2 NVMe"] },
+            "display_and_video": { "items": ["eDP (NCS8803 bridge to Framework 13 panel)", "HDMI", "multi-camera ingest into autonomy compute"] },
+            "control_and_fieldbus": { "items": ["CAN and automotive protocols", "IO-Link", "I2C, SPI, UART, JTAG/SWD", "FANUC and ABB robot I/O integration", "72-line LVCMOS25 parallel capture at 50 MHz DDR"] },
+            "power": { "items": ["Multi-level NVDC power-delivery architecture and iMVP9.3 VR/PMIC for Intel Core Ultra", "USB-C PD (20 V in) with buck conversion", "Buck, boost, buck-boost (LT8705A) and LDO trees; power sequencing", "Device-scale UPS modules for industrial controllers", "103 kHz series-series inductive wireless power TX/RX with LTspice models", "IPC-2152 current checks and finite-difference IR-drop review"] },
+            "rf_and_analog": { "items": ["Two-channel RF receiver front end: AD8318 log detectors, PE42562 switches, QPL9547 LNA, PE43711 attenuators", "Time-of-flight lidar AFE (AFBR-S50)", "Motor drive: 6EDL7141 gate driver, H-bridge (LM5106), AS5047P magnetic encoder", "Precision environmental sensing (SHT45, BMP585)"] },
+            "sensors": { "items": ["Multi-camera systems (MIPI CSI-2, GMSL, USB3)", "Lidar, optical-flow and inertial sensors", "Industrial encoders, laser and optical sensors, safety and specialty sensors", "Sensor power, sync/timing and bandwidth budgeting into autonomy compute"] }
+          }
+        },
+        "board_types": {
+          "summary": "Classes of board designed and taken through fabrication.",
+          "items": ["Chip-down SoC motherboards: Intel Panther Lake (Core Ultra 9) SoM, RK3588S compact board with onboard DDR5, NVIDIA Orin carrier, Raspberry Pi CM5 mainboard", "FPGA boards: 8-layer Kintex-7 XC7K325T capture board, ~820 parts, 12.5k tracks, 3.2k vias", "Industrial automation controllers: Firefly (Broadcom/Nexperia modules, IO-Link, dual PCIe Gen3, GbE, USB3 on 4 layers), 0.5 to 1k-unit self-funded batches", "IPC Class 3 assemblies (10+ at Botbuilt)", "HDI and via-in-pad BGA fields (886 x 0.152 mm drills on one board)", "Polyimide flex and rigid-flex: 14-board production flex family, 4-layer stackup with coverlay, stiffener and EMI film, generated programmatically and length-matched", "Power and wireless-power boards, motor drivers, RF front ends, sensor modules, battery carriers", "2 to 8 copper layers; boards from 24x38 mm flexes to 233x106 mm mainboards"]
+        },
+        "speeds_and_signal_integrity": {
+          "summary": "Data rates handled and the SI/PI practice behind them.",
+          "items": ["Lanes to PCIe Gen5 / Thunderbolt 4 class rates; 10 Gbps serial; DDR5 and LPDDR5X; DDR3", "Controlled-impedance stackups (rigid and flex), length and skew matching, differential-pair routing", "Field-solved impedance, crosstalk and return-path review; IR-drop PI review", "EMI/SI diagnosis and mitigation on deployed PCIe and Thunderbolt hardware", "Flex stackup studies against a 50 ohm target across fab stack codes"]
+        },
+        "design_tools": { "items": ["Altium", "KiCad (daily driver; maintains a patched 10.99 fork with a guarded IPC API and routing CLI)", "Cadence (basic)", "LTspice", "kicad-cli automation, scripted exports, programmatic board generation"] },
+        "validation_and_test": { "items": ["Board and system bring-up", "Oscilloscope, logic analyzer, DMM, scripted VNA", "Precision rework", "HALT/HASS", "Hardware-in-the-loop firmware CI", "Schematic-parity DRC, ERC/DRC gates, hash-replayable records of every tool run"] },
+        "manufacturing_and_lifecycle": { "items": ["DFM/DFA review and phase-gated hardware programs with schedule, risk and trade-off tracking", "Domestic and APAC design and EMS partner management; supplier, customs and production troubleshooting; native Mandarin for supplier coordination", "JLC/LCSC turnkey release pipelines: readiness checks, BOM/CPL, order packages with SHA-256 manifests", "BOM optimization (20 percent subsystem cost cut) and contract harness manufacturing", "Fleet lifecycle: hardware versioning, IQC, provisioning and flashing, revision traceability, field serviceability"] },
+        "eda_tooling_built": { "items": ["Numba A* single-ended and differential-pair routers; BGA dogbone escape; QFN fan-out; DDR3 plan/route/tune; 3W/5W spacing and impedance checks (~24k lines)", "Decoupling placer benchmarked on 8 open boards and 21 ICs with zero courtyard overlaps", "Multi-agent packet routing with merge gates; LLM gate evaluation against human decisions", "Browser workbench: board and schematic canvas, checks, worklists, LLM assistant, KiCad-fork Docker image", "Client deliverable site generator: per-layer SVG with cross-probing, 3D GLB, BOM, ERC/DRC, stackup, fab zips, share links"] }
+      }
+    },
+    "embedded_and_firmware": {
+      "summary": "Firmware and embedded Linux from register level to fleet management.",
+      "children": {
+        "microcontrollers": { "items": ["STM32 (L4, G0) and STM8", "Espressif", "RP2350 embedded controller", "SAMD21", "GD32F303", "Register-level Cortex-M bring-up"] },
+        "runtimes": { "items": ["Bare-metal C/C++", "RTOS", "Linux device drivers", "Yocto-based embedded Linux fleets with versioned provisioning, flashing and updates", "Resident UART bootloaders, SEGGER RTT"] },
+        "practice": { "items": ["Firmware CI with hardware-in-the-loop deployment", "Python for test automation and instrument scripting", "Sensor drivers over I2C/SPI/UART; CAN stacks"] }
+      }
+    },
+    "software": {
+      "summary": "Production backend, frontend, data and infrastructure work; about 250k lines across the trading engines alone.",
+      "children": {
+        "languages": { "items": ["Python (primary)", "TypeScript / JavaScript", "C and C++", "PARI/GP", "SQL", "Bash"] },
+        "backend_and_services": { "items": ["FastAPI and asyncio services with supervised tasks, crash isolation and backoff", "Event-sourced domain models (immutable spec plus append-only event log)", "Postgres with Alembic and Prisma migrations; Redis caching", "Next.js apps with Stripe payments, Resend email, Neon Postgres", "Express services; Playwright browser automation exposed as a REST API"] },
+        "frontend": { "items": ["React and TypeScript, Vite, Tailwind", "Perspective data grids, charting, Monte Carlo payoff designers", "Phone layouts, Scriptable iOS widgets, Übersicht Mac widgets", "Static sites and single-file pages"] },
+        "data_and_ml": { "items": ["Partitioned parquet lake with pyarrow (minute bars since 2016, options since 2024)", "LightGBM, scikit-learn, HAR-RV, PyTorch TCNs, CuPy GPU backtests, numba", "EDGAR and SEC filing pipelines with documented timestamp handling", "Point-in-time universes and fundamentals"] },
+        "ci_deployment_and_ops": { "items": ["Linux systemd units with WatchdogSec, timer-driven auto-deploy gated on pytest, backups and log rotation", "Local CI gates: ruff, mypy --strict (explicit Any banned in core), pytest, pytest-asyncio, hypothesis, frontend typecheck and lint; pre-commit hooks; pinned lockfiles (uv, requirements.lock)", "Byte-identical rebuild gates for generated artifacts (research paper, flex boards)", "Docker images (including a KiCad fork build); Vercel deployments; GitHub Releases behind an edge proxy with password and share-link middleware", "Incident runbooks, dated decision logs, spec-first development (18 specs for one engine)", "Firmware CI with HIL deployment"] },
+        "llm_engineering": { "items": ["Structured-output-only model calls; untrusted text fenced against prompt injection; every call journaled including refusals", "Model fallback with cooldowns; cost caps on nightly runs", "Local models (Qwen3, gpt-oss via llama.cpp) benchmarked as review gates against Opus and humans", "Anthropic API quoting pipeline with pricing-engine invariant checks", "MCP servers (this one)"] }
+      }
+    },
+    "trading_systems_and_risk": {
+      "summary": "Production execution engines and risk controls, built and operated.",
+      "children": {
+        "execution": { "items": ["Two broker engines (Alpaca; Interactive Brokers via ib_async) with broker access isolated to one package", "Plans with attached exits; stops and targets on filtered fair value (size-weighted micro-price); exits escalate mid, inside, touch, market", "Restart-safe reconciliation against broker positions and orders; fake broker for tests; shadow mode", "Per-call latency journaling; Black-Scholes P&L attribution (spread, delta/gamma, theta, vega, basis)", "Market data: SIP and OPRA feeds, Redis-cached bars and quotes, an OPRA options logger"] },
+        "risk_controls": { "items": ["Pure-function risk kernels: max loss per plan, max daily loss, max gross exposure, flatten on heartbeat loss; per-book drawdown budgets; notional caps", "Resting catastrophe GTC stops at the broker; persisted fail-closed halts; kill-all with optional flatten", "Operator arm/disarm lever outside the engine; off-box read-only dead-man's switch with its isolation under test", "Boot-lock validators separating paper and live; explicit switch for live strategies", "Nightly Flex statement reconciliation; portfolio risk and stress modules"] },
+        "research_method": { "items": ["Written pre-registrations before code, sha256-pinned, amended only by dated addenda", "In-sample/holdout splits, placebo and shuffled nulls, Newey-West statistics", "80+ study directories; about 70 percent of studies with a verdict killed", "Nightly research runner with a monthly spend cap"] }
+      }
+    },
+    "math_and_simulation": {
+      "summary": "Computational work outside the day job.",
+      "items": ["Elliptic-curve rank search: C sieve across 10 cores, PARI/GP fake 2-descent and exact independence certificates; re-certified the known rank 25 to 28 curves and certified a new rank-26+ fiber", "Discrete-event delivery-robot fleet simulator with demand-to-fleet-size-to-unit-economics model", "GMM regime detection and Monte Carlo significance testing", "Broker simulator with 14 fault types, 11 pre-trade safety checks and circuit breakers"]
+    },
+    "leadership_and_programs": {
+      "summary": "Running teams, vendors and programs.",
+      "items": ["Founded and runs a 5 to 10 engineer design firm", "Sole hardware owner for a multi-platform L4 drone program", "Manages simulation and validation contractors and domestic and APAC EMS partners", "Client scoping, binding fixed-price quoting, phase-gated delivery", "Self-funded product batches of 0.5 to 1k units with go-to-market ownership"]
+    }
+  },
   "projects": [
-    { "name": "FPGA capture board", "area": "hardware", "what": "8-layer, ~206x120 mm, Kintex-7 XC7K325T, 72 LVCMOS25 lines at 50 MHz DDR from a mezzanine over two Hirose FX10A-144, 2x SFP+ 10GBASE-R, USB 3.2 on GTX, DDR3, HDMI, FT4232H JTAG/UART, USB-C PD. ~820 parts, 12.5k tracks, 3.2k vias. Zero KiCad DRC errors at last readiness check.", "status": "In layout; readiness tracked per release." },
-    { "name": "Flex extension family", "area": "hardware", "what": "14 polyimide flexes (plus 5 archived) extending a handheld device head over Samtec LSHM connectors. Straight, right-angle and Z/L in-plane variants from 24x38 mm to 169x120 mm. All generated from one script; SI study comparing fab flex stackups against a 50 ohm target.", "status": "Several sets manufactured; shaped sets released for quote." },
-    { "name": "Freework (fw13)", "area": "hardware", "what": "Raspberry Pi CM5 mainboard for the unmodified Framework 13 chassis: inverted CM5 on a rigid bridge, RP2350B embedded controller, NCS8803 eDP, M.2 NVMe, USB3. 8-layer, ~1,000 parts; RC2 at 0 DRC errors, 0 opens, 0 schematic-parity differences. Collaborative project.", "status": "Pre-fab audit open." },
-    { "name": "RF receiver front-end test board", "area": "hardware", "what": "Two-channel RF RX front end (AD8318 log detector, PE42562 switches, QPL9547 LNA, PE43711 attenuators, STM32G0B1). Schematic restructured into 20 pages with the netlist partition verified identical (191 nets, 232 components, 0 ERC).", "status": "Schematic complete; 4-layer 100x65 mm board planned." },
-    { "name": "Sensor and wireless-power boards (employer)", "area": "hardware", "what": "Time-of-flight lidar module (AFBR-S50, STM32L431, SHT45, BMP585) with its bare-metal C++ firmware; 103 kHz series-series inductive charger TX/RX pair (LM5106 H-bridge, LT8705A buck-boost, CAN) with LTspice models; battery carrier.", "status": "Shipped designs." },
-    { "name": "CyberGear driver reverse-engineering", "area": "hardware", "what": "KiCad schematic and PCB of Xiaomi's CyberGear micro-motor driver: GD32F303, 6EDL7141 gate driver, AS5047P encoder.", "status": "Public on GitHub." },
-    { "name": "Layout environment and placer", "area": "tooling", "what": "Routers, escape and fan-out generators, DDR3 tuning, current and spacing checks, SI/PI review, a decoupling placer benchmarked against human layouts on 8 open boards, and a hash-replayable record of every tool run and decision.", "status": "In daily use at Yaedo." },
-    { "name": "Board site generator and workbench", "area": "tooling", "what": "Static deliverable sites per client with viewers, DRC/ERC, stackup, fab packs and share links; a browser workbench with a KiCad-fork Docker image, canvases, checks and an LLM assistant.", "status": "In production for client deliverables." },
-    { "name": "Alpaca engine", "area": "trading", "what": "Python 3.13 / FastAPI / React / Postgres / Redis. Plans with attached exits, strategy plane with crash isolation and supervised restarts, 13 strategy modules behind one risk gate, ops console and trading terminal, phone and desktop widgets, OPRA options logger, nightly research runner. 172k lines of Python, 1,291 backend tests.", "status": "Live and paper, deployed on Linux with systemd." },
-    { "name": "Interactive Brokers engine", "area": "trading", "what": "Python 3.12, broker access isolated to one package, event-sourced plans, fake broker for tests, enforcer and reconcile loops, nightly Flex reconciliation, shadow mode. mypy --strict, hypothesis, 1,786 tests, 18 written specs.", "status": "Paper, ramping." },
-    { "name": "Research program", "area": "quant", "what": "88 study directories, 36 indexed, pre-registered with sha256; LightGBM and HAR-RV variance forecasting, Torch TCN minute-tape pretraining, LLM memorisation controls with a written paper; EDGAR, 8-K, Form 10 and tender data; point-in-time universes.", "status": "Ongoing nightly runs with a spend cap." },
-    { "name": "Earlier trading tooling", "area": "trading", "what": "GPU backtester across the Russell 2000 with GMM regime detection and Monte Carlo significance (stellaron); Playwright brokerage automation API and multi-user dashboard (narukami, inazuma); options strategy DSL with a two-way visual builder (archon); Schwab-style paper simulator with chaos injection (schwob).", "status": "Private repos, 2026." },
-    { "name": "rank32", "area": "math", "what": "Search for a rank-32 elliptic curve: C sieve across 10 cores, PARI/GP fake 2-descent and exact independence certificates, reconstruction of the K3 families behind the record curves. Re-certified the known rank 25 to 28 curves and certified a new fiber of rank at least 26.", "status": "Complete; no rank 32 found." },
-    { "name": "Delivery-robot fleet simulator", "area": "simulation", "what": "Discrete-event simulator with replay front end and a demand-to-fleet-size-to-unit-economics model.", "status": "Complete." }
+    { "name": "Intel Panther Lake system-on-module", "area": "hardware", "year": "2026", "what": "Solo-architected next-generation autonomous drone motherboard around the Intel Core Ultra 9 (Panther Lake) SoC; about 90 percent of the schematic captured by hand: Thunderbolt 4 / PCIe 5 topology, LPDDR5X, iMVP9.3 PMIC, multi-level NVDC power delivery.", "status": "Design complete through schematic." },
+    { "name": "Firefly automation controller", "area": "hardware", "year": "2023-2025", "what": "Motherboard for Broadcom/Nexperia-based modules with IO-Link and dual PCIe Gen3 device support; SI-aware PCIe, GbE and USB3 layout on 4 layers. Owned definition, bring-up, manufacture and go-to-market.", "status": "Shipped; self-funded 0.5 to 1k-unit batches (Paisley Microsystems)." },
+    { "name": "RK3588S compact board", "area": "hardware", "year": "2025", "what": "Chip-down RK3588S with onboard DDR5 on the smallest RK3588 footprint in the industry; full schematic, layout and bring-up.", "status": "Brought up." },
+    { "name": "NVIDIA Orin carrier", "area": "hardware", "year": "2024", "what": "Custom carrier resolving sensor-bandwidth bottlenecks for on-robot AI processing on FANUC/ABB truss-assembly lines.", "status": "Deployed." },
+    { "name": "Kintex-7 capture board", "area": "hardware", "year": "2026", "what": "8-layer, ~206x120 mm, XC7K325T FFG676, 72 LVCMOS25 lines at 50 MHz DDR over two Hirose FX10A-144, 2x SFP+ 10GBASE-R, USB 3.2 on GTX, DDR3, HDMI, FT4232H, USB-C PD. ~820 parts, 12.5k tracks, 3.2k vias, 0 DRC errors at last readiness check.", "status": "In layout (client work via YAEDO)." },
+    { "name": "Flex extension family", "area": "hardware", "year": "2026", "what": "14 polyimide flexes extending a handheld device head over Samtec LSHM connectors; straight, right-angle and Z/L variants, 24x38 to 169x120 mm; generated from one 2,000-line script, byte-identical rebuilds, length-matched.", "status": "Several sets manufactured (client work via YAEDO)." },
+    { "name": "Freework CM5 mainboard", "area": "hardware", "year": "2026", "what": "Raspberry Pi CM5 mainboard for the unmodified Framework 13 chassis: inverted CM5 on a rigid bridge, RP2350B EC, NCS8803 eDP, M.2 NVMe, USB3; 8 layers, ~1,000 parts; RC2 at 0 DRC, 0 opens, 0 parity diffs. Collaborative.", "status": "Pre-fab audit open." },
+    { "name": "RF receiver front-end test board", "area": "hardware", "year": "2026", "what": "Two-channel RF RX front end (AD8318, PE42562, QPL9547, PE43711, STM32G0B1); schematic restructured into 20 pages with netlist partition verified identical.", "status": "4-layer board planned." },
+    { "name": "Lidar module and wireless-power pair", "area": "hardware", "year": "2025-2026", "what": "AFBR-S50 time-of-flight module (STM32L431, SHT45, BMP585) with bare-metal C++ firmware; 103 kHz inductive charger TX/RX (LM5106, LT8705A, CAN) with LTspice models.", "status": "Shipped (employer)." },
+    { "name": "CyberGear driver reverse-engineering", "area": "hardware", "year": "2025", "what": "KiCad schematic and PCB of Xiaomi's CyberGear micro-motor driver: GD32F303, 6EDL7141, AS5047P.", "status": "Public on GitHub." },
+    { "name": "YAEDO EDA toolchain", "area": "tooling", "year": "2026", "what": "Patched KiCad fork, routers and escape generators, DDR3 tuning, SI/PI review, benchmarked decoupling placer, workbench, deliverable site generator, hash-replayable tool records.", "status": "In daily use." },
+    { "name": "Automated quoting system", "area": "tooling", "year": "2025-2026", "what": "Next.js, Prisma/Neon, Stripe and Anthropic API: binding, countersigned quotes from submitted specs and files, with pricing-engine invariant checks.", "status": "In production at boardmiko.com." },
+    { "name": "Alpaca trading engine", "area": "trading", "year": "2026", "what": "Python 3.13 / FastAPI / React / Postgres / Redis; 13 strategy modules behind one risk gate; ops console, trading terminal, widgets, OPRA logger, nightly research runner. 172k lines of Python, 1,291 backend tests.", "status": "Live and paper on Linux/systemd." },
+    { "name": "Interactive Brokers engine", "area": "trading", "year": "2026", "what": "Python 3.12; event-sourced plans; enforcer and reconcile loops; nightly Flex reconciliation; mypy --strict; hypothesis; 1,786 tests; 18 written specs.", "status": "Paper, ramping." },
+    { "name": "Research program", "area": "quant", "year": "2026", "what": "88 study directories under pre-registration; LightGBM and HAR-RV variance forecasting, Torch TCN minute-tape pretraining, LLM memorisation controls with a written paper; EDGAR, 8-K, Form 10 and tender data.", "status": "Ongoing." },
+    { "name": "Earlier trading tooling", "area": "trading", "year": "2026", "what": "GPU backtester with GMM regimes (stellaron); Playwright brokerage API and dashboard (narukami, inazuma); options strategy DSL with two-way visual builder (archon); Schwab-style simulator with chaos injection (schwob).", "status": "Private repos." },
+    { "name": "rank32", "area": "math", "year": "2026", "what": "Search for a rank-32 elliptic curve; re-certified rank 25 to 28 record curves and certified a new rank-26+ fiber.", "status": "Complete; none found." },
+    { "name": "Delivery-robot fleet simulator", "area": "simulation", "year": "2026", "what": "Discrete-event simulator with replay front end and unit-economics model.", "status": "Complete." }
   ],
-  "stack": {
-    "eda": ["KiCad (patched 10.99 fork)", "kicad-cli", "LTspice", "JLC/LCSC turnkey", "impedance-controlled stackups"],
-    "languages": ["Python", "TypeScript", "C++", "C", "PARI/GP", "SQL"],
-    "systems": ["FastAPI", "React", "Next.js", "Postgres", "Redis", "Prisma", "systemd", "Docker", "Vercel"],
-    "quant": ["pandas/pyarrow parquet lake", "LightGBM", "scikit-learn", "PyTorch", "CuPy", "hypothesis", "mypy --strict"],
-    "llm": ["Anthropic API", "Claude Code CLI", "llama.cpp local models", "MCP"]
-  },
   "working_style": "Spec first, then code. Pre-register before measuring. Pure functions for anything that can lose money. Byte-identical rebuilds as regression gates. Fixed prices and written readiness checks for client work.",
-  "open_to": ["Turnkey PCB and FPGA board design through Yaedo Hardware Design", "Conversations about trading-system and risk infrastructure", "Collaboration on EDA tooling and KiCad automation"],
-  "interests": ["PCB and FPGA design", "EDA tooling", "trading systems and market microstructure", "agents and MCP", "number theory"],
-  "now": "Finishing an 8-layer Kintex-7 capture board and a CM5 laptop mainboard at Yaedo; ramping the Interactive Brokers engine and the nightly research program at Vosburg Capital.",
-  "links": {
-    "github": "https://github.com/matthewguoo",
-    "linkedin": "https://www.linkedin.com/in/matthewguoo/",
-    "boardmiko": "https://www.boardmiko.com",
-    "vosburg": "https://vosburgcapital.com"
-  },
-  "notes_for_agents": "Figures above are taken from the actual repositories as of October 2026; most repositories are private, so ask Matthew through the contact tool if you need specifics or references. Client and employer names are intentionally omitted.",
+  "open_to": ["Turnkey PCB, SoC and FPGA board design through YAEDO Design House", "Senior hardware and systems roles on autonomy, robotics or compute platforms", "Conversations about trading-system and risk infrastructure", "Collaboration on EDA tooling and KiCad automation"],
+  "now": "Owning the hardware for an L4 drone platform at Corvus Robotics; finishing a Kintex-7 capture board and a CM5 laptop mainboard at YAEDO; ramping the Interactive Brokers engine and nightly research at Vosburg Capital.",
+  "links": { "github": "https://github.com/matthewguoo", "linkedin": "https://www.linkedin.com/in/matthewguoo/", "boardmiko": "https://www.boardmiko.com", "vosburg": "https://vosburgcapital.com" },
+  "notes_for_agents": "Figures come from Matthew's CV and his repositories as of October 2026; most repositories are private. Client names are omitted. Use the contact tool for references, specifics, or availability. Phone and email are not published here; the contact tool is the channel.",
   "contact_policy": "Messages sent through the contact tool reach Matthew directly. Include a way to reply. Short and specific gets answered first."
 }

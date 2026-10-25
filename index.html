@@ -36,7 +36,7 @@
 <style>
   :root {
     --sakura:#8e2130; --ink:#1a1a1a; --ink-2:#333; --muted-1:#555; --muted-3:#888;
-    --bg:#f5f5f5; --surface:#fff; --line-soft:#1a1a1a14; --line:#1a1a1a24;
+    --bg:#f5f5f5; --surface:#fff; --surface-soft:#f9f5f9; --line-soft:#1a1a1a14; --line:#1a1a1a24;
     --font-display:Inter, system-ui, -apple-system, sans-serif;
     --font-body:"Noto Sans JP", Inter, system-ui, sans-serif;
     --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -60,12 +60,17 @@
   .meta .dot { color:var(--muted-3); }
   .meta .pin { display:inline-flex; align-items:center; gap:4px; }
   .meta svg { width:13px; height:13px; fill:none; stroke:var(--sakura); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
-  .mcp { margin:22px 0 0; border:1px solid var(--line); background:var(--surface); font-family:var(--mono); font-size:13px; }
-  .mcp div { padding:10px 14px; display:grid; grid-template-columns:92px 1fr; gap:12px; align-items:baseline; }
-  .mcp div + div { border-top:1px solid var(--line-soft); }
-  .mcp .k { font-family:var(--font-display); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-3); white-space:nowrap; }
-  @media (max-width:480px) { .mcp div { grid-template-columns:1fr; gap:4px; } }
-  .mcp code { color:var(--ink); word-break:break-all; }
+  .mcp { margin:24px 0 0; border:1px solid var(--line); background:var(--surface); max-width:560px; }
+  .mcp-url { display:flex; align-items:stretch; border-bottom:1px solid var(--line-soft); }
+  .mcp-url code { flex:1; padding:12px 14px; font-family:var(--mono); font-size:13.5px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mcp button { font:inherit; font-family:var(--font-display); font-size:12.5px; font-weight:500; color:var(--ink); background:var(--surface); border:0; cursor:pointer; padding:0 14px; white-space:nowrap; }
+  .mcp-url button { border-left:1px solid var(--line-soft); }
+  .mcp button:hover { color:var(--sakura); background:var(--surface-soft); }
+  .mcp button.ok { color:var(--sakura); }
+  .mcp-row { display:flex; flex-wrap:wrap; align-items:center; gap:0; }
+  .mcp-row .k { font-family:var(--font-display); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-3); padding:10px 14px; }
+  .mcp-row button { padding:10px 12px; }
+  .mcp-row button + button { border-left:1px solid var(--line-soft); }
   .fine { font-size:13px; color:var(--muted-3); margin-top:14px; }
   footer { padding:18px 0 24px; border-top:1px solid var(--line-soft); font-size:12px; color:var(--muted-3); }
 </style>
@@ -88,14 +93,48 @@
       <span class="pin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.4-6-10a6 6 0 0 1 12 0c0 4.6-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>Mountain View</span>
     </div>
     <p>There's no résumé on this page. The site runs an MCP server instead. Point your own agent at it, ask it about me, or ask it to send me a message.</p>
-    <div class="mcp">
-      <div><span class="k">MCP</span><code>https://matthewguo.me/mcp</code></div>
-      <div><span class="k">Claude Code</span><code>claude mcp add --transport http matthewguo https://matthewguo.me/mcp</code></div>
-      <div><span class="k">Tools</span><code>about · capabilities · links · contact</code></div>
+    <div class="mcp" id="mcp">
+      <div class="mcp-url"><code id="mcp-url">https://matthewguo.me/mcp</code><button type="button" data-copy="url">Copy</button></div>
+      <div class="mcp-row">
+        <span class="k">Add to</span>
+        <button type="button" data-copy="claude-code" title="Copies the Claude Code command">Claude Code</button>
+        <button type="button" data-copy="claude" title="Copies the URL; paste it under Settings → Connectors → Add custom connector">Claude</button>
+        <button type="button" data-copy="cursor" title="Copies the Cursor mcp.json entry">Cursor</button>
+        <button type="button" data-copy="codex" title="Copies the Codex CLI command">Codex</button>
+        <button type="button" data-copy="vscode" title="Copies the VS Code command">VS Code</button>
+        <button type="button" data-copy="json" title="Copies a generic mcpServers entry">JSON</button>
+      </div>
     </div>
-    <p class="fine">No login. Works with anything that speaks MCP over HTTP.</p>
+    <p class="fine" id="fine">No login. Streamable HTTP. Tools: about · experience · capabilities · search · projects · links · contact.</p>
   </main>
   <footer>© 2026 Matthew Guo</footer>
 </div>
+<script>
+(function(){
+  var url='https://matthewguo.me/mcp', name='matthewguo';
+  var snippets={
+    'url': url,
+    'claude-code': 'claude mcp add --transport http '+name+' '+url,
+    'claude': url,
+    'cursor': JSON.stringify({mcpServers:{matthewguo:{url:url}}},null,2),
+    'codex': 'codex mcp add '+name+' --url '+url,
+    'vscode': "code --add-mcp '"+JSON.stringify({name:name,type:'http',url:url})+"'",
+    'json': JSON.stringify({mcpServers:{matthewguo:{type:'http',url:url}}},null,2)
+  };
+  var hints={'claude':'Copied the URL. In Claude: Settings → Connectors → Add custom connector.','cursor':'Copied. Paste into ~/.cursor/mcp.json.','json':'Copied a generic mcpServers entry.'};
+  var fine=document.getElementById('fine'), fineText=fine.textContent, timer;
+  document.getElementById('mcp').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-copy]'); if(!b) return;
+    var key=b.getAttribute('data-copy'), text=snippets[key];
+    function done(){
+      var label=b.textContent; b.textContent='Copied'; b.classList.add('ok');
+      fine.textContent=hints[key]||fineText;
+      clearTimeout(timer); timer=setTimeout(function(){ b.textContent=label; b.classList.remove('ok'); fine.textContent=fineText; },1800);
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done,function(){ window.prompt('Copy:',text); }); }
+    else { window.prompt('Copy:',text); }
+  });
+})();
+</script>
 </body>
 </html>
