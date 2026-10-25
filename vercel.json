@@ -36,6 +36,14 @@
     {
       "source": "/mcp",
       "destination": "/api/mcp"
+    },
+    {
+      "source": "/p",
+      "destination": "/api/p"
+    },
+    {
+      "source": "/p/(.*)",
+      "destination": "/api/p"
     }
   ]
 }

@@ -272,7 +272,7 @@ export default async function handler(req, res) {
       name: SERVER.name, version: SERVER.version, transport: 'streamable-http', endpoint: 'https://matthewguo.me/mcp', auth: 'none',
       description: `MCP server for Matthew Guo's personal site. It answers questions about him (bio, work history, a hierarchical capability tree, projects) and takes two actions on a user's behalf: request a call and send him a message.`,
       how_to_connect: { claude: 'Settings -> Connectors -> Add custom connector -> paste the endpoint', claude_code: 'claude mcp add --transport http matthewguo https://matthewguo.me/mcp', cursor: '{"mcpServers":{"matthewguo":{"url":"https://matthewguo.me/mcp"}}}', codex: 'codex mcp add matthewguo --url https://matthewguo.me/mcp', vscode: `code --add-mcp '{"name":"matthewguo","type":"http","url":"https://matthewguo.me/mcp"}'` },
-      without_mcp: 'The same data is at https://matthewguo.me/profile.md (compact markdown) and https://matthewguo.me/profile.json (full). Contact and scheduling need the MCP tools.',
+      without_mcp: 'Without MCP: fetch https://matthewguo.me/p, a small index with links to every branch (experience, projects, search, capability tree); profile.md and profile.json hold everything in one file. Contact and scheduling need the MCP tools.',
       tools: TOOLS.map((t) => ({ name: t.name, description: t.description, input: Object.keys(t.inputSchema.properties || {}) })),
       resources: 'resources/list exposes profile:// URIs for the same data.',
       protocol: 'POST JSON-RPC 2.0 (initialize, tools/list, tools/call, resources/list, resources/read, ping) to this URL.',

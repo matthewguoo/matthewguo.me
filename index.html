@@ -134,7 +134,7 @@
     'codex': 'codex mcp add '+name+' --url '+url,
     'vscode': "code --add-mcp '"+JSON.stringify({name:name,type:'http',url:url})+"'",
     'json': JSON.stringify({mcpServers:{matthewguo:{type:'http',url:url}}},null,2),
-    'prompt': 'Matthew Guo runs an MCP server at '+url+' (Streamable HTTP, no auth). If you can add MCP connectors, add it and use its tools: about, experience, capabilities (a tree; call with a dotted path like hardware.interfaces), search, projects, links, availability, request_call, contact. If you cannot add connectors, read https://matthewguo.me/profile.md (compact) or https://matthewguo.me/profile.json (full). Then tell me who he is and what he has built, and ask me whether I want to message him or book a call.'
+    'prompt': 'Please learn about Matthew Guo by fetching https://matthewguo.me/p and following the links on that page for whatever I ask about (it is a small index: experience, projects, search, and a capability tree with one page per branch; every page lists its children as URLs). Start with a short summary of who he is and what he has built. If I want to message him or book a call, that needs his MCP server at https://matthewguo.me/mcp; tell me how to add it in this app if you cannot add connectors yourself.'
   };
   var bar=document.getElementById('mcp-bar'), lit=null, timer;
   function flash(b){
