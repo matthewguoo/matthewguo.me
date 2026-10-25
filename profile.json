@@ -1,19 +1,57 @@
 {
   "name": "Matthew Guo",
-  "summary": "Hardware and systems engineer. Carnegie Mellon. Based in Mountain View, California.",
-  "roles": [
-    { "org": "Yaedo Hardware Design (boardmiko)", "role": "Founder", "url": "https://www.boardmiko.com", "note": "Turnkey PCB design: idea, schematic or netlist in; assembled boards out, one fixed price." },
-    { "org": "Vosburg Capital", "role": "Chief Investment Officer", "url": "https://vosburgcapital.com", "note": "Long/short equity in hard technology. Builds the firm's research and trading systems." }
-  ],
-  "education": [ { "school": "Carnegie Mellon University" } ],
+  "summary": "Hardware and systems engineer in Mountain View, California. Carnegie Mellon. Designs dense mixed-signal and FPGA boards, builds the EDA tooling around them, and builds and runs production trading systems with the risk controls to match. Founder of Yaedo Hardware Design (boardmiko.com). Chief Investment Officer at Vosburg Capital.",
   "location": "Mountain View, CA",
-  "interests": ["PCB and FPGA design", "trading systems", "market microstructure", "agents and MCP"],
-  "now": "Running Yaedo Hardware Design and building the quant research stack at Vosburg Capital.",
+  "education": [{ "school": "Carnegie Mellon University" }],
+  "roles": [
+    { "org": "Yaedo Hardware Design (boardmiko.com)", "role": "Founder and lead engineer", "url": "https://www.boardmiko.com", "note": "Turnkey PCB design at a fixed price: idea, schematic or netlist in; assembled, DRC-clean, fab-ready boards out. Own toolchain on a patched KiCad fork." },
+    { "org": "Vosburg Capital", "role": "Chief Investment Officer", "url": "https://vosburgcapital.com", "note": "Long/short equity in hard technology. Built the firm's research, execution and risk infrastructure from scratch." }
+  ],
+  "headline_capabilities": [
+    "High-layer-count, high-pin-count PCB design: 8-layer boards with 800 to 1000+ placed parts, Kintex-7 FFG676 and Raspberry Pi CM5 class BGAs, 10GBASE-R SFP+, USB 3.2 on transceiver lanes, DDR3, HDMI, eDP, USB-C PD; impedance-controlled stackups and length-matched differential pairs.",
+    "Flex and rigid-flex: 14 production polyimide flex boards (4-layer stackup, coverlay, stiffener, EMI film) for a handheld medical device, generated programmatically from a 2,000-line Python generator that rebuilds byte-identical and length-matches every signal line.",
+    "EDA tooling: an in-house layout environment (about 24k lines) with numba A* single-ended and differential-pair routers, BGA dogbone escape, QFN fan-out, DDR3 plan/route/tune, IPC-2152 current and 3W/5W spacing checks; a benchmarked decoupling placer (8 open-source boards, 21 ICs, zero courtyard overlaps); field-solved impedance, crosstalk and return-path review; finite-difference IR-drop review; a patched KiCad fork with a guarded collaboration API and a routing CLI.",
+    "Deliverable pipelines: a static board site generator (kicad-cli exports, per-layer SVG with cross-probing, 3D GLB, BOM, ERC/DRC, stackup, JLC/CM fab zips with SHA-256 manifests) and a browser workbench that pairs the schematic and board canvas with checks, worklists and an LLM assistant.",
+    "Production trading systems: two broker engines (Alpaca; Interactive Brokers) in Python, FastAPI and TypeScript, about 250k lines with 3,000+ tests. Event-sourced positions, exits on filtered fair value with a mid-to-market price ladder, restart-safe reconciliation against the broker, per-call latency journaling, Black-Scholes P&L attribution, systemd deployment with watchdogs and test-gated auto-deploy.",
+    "Risk management as code: pure-function risk kernels (mypy --strict, no Any) enforcing per-plan loss, daily loss, gross exposure and heartbeat-loss flatten; per-book drawdown budgets; resting catastrophe stops at the broker; persisted fail-closed halts; an operator arm/disarm lever outside the engine; an off-box read-only dead-man's switch whose isolation is tested; nightly Flex statement reconciliation.",
+    "Research discipline: 80+ studies run under written pre-registrations (sha256-pinned), in-sample/holdout splits, placebo and shuffled nulls, Newey-West statistics, and a byte-identical paper rebuild as a regression gate. Roughly 70 percent of studies with a verdict were killed. Data lake of SIP minute bars since 2016 and OPRA options since 2024 in partitioned parquet, plus EDGAR filings with documented SEC timestamp handling.",
+    "LLMs used carefully in production: structured-output-only calls, untrusted text fenced against prompt injection, every call journaled including refusals, model fallback with cooldowns, and the model never places orders. Local models (Qwen3 via llama.cpp) benchmarked as review gates.",
+    "Firmware: bare-metal C++ on STM32L4 (time-of-flight lidar, I2C sensors, resident UART bootloader, RTT), register-level Cortex-M bring-up, SAMD21 PWM control for a 103 kHz inductive charger.",
+    "Breadth: GPU-accelerated backtesting with CuPy and GMM regime models; a broker simulator with 14 fault types and 11 pre-trade safety checks; a discrete-event fleet simulator with unit economics; a Next.js, Prisma, Stripe and Anthropic-API quoting product; a number-theory pipeline in C and PARI/GP that re-certified record-rank elliptic curves and certified a new rank-26+ fiber."
+  ],
+  "projects": [
+    { "name": "FPGA capture board", "area": "hardware", "what": "8-layer, ~206x120 mm, Kintex-7 XC7K325T, 72 LVCMOS25 lines at 50 MHz DDR from a mezzanine over two Hirose FX10A-144, 2x SFP+ 10GBASE-R, USB 3.2 on GTX, DDR3, HDMI, FT4232H JTAG/UART, USB-C PD. ~820 parts, 12.5k tracks, 3.2k vias. Zero KiCad DRC errors at last readiness check.", "status": "In layout; readiness tracked per release." },
+    { "name": "Flex extension family", "area": "hardware", "what": "14 polyimide flexes (plus 5 archived) extending a handheld device head over Samtec LSHM connectors. Straight, right-angle and Z/L in-plane variants from 24x38 mm to 169x120 mm. All generated from one script; SI study comparing fab flex stackups against a 50 ohm target.", "status": "Several sets manufactured; shaped sets released for quote." },
+    { "name": "Freework (fw13)", "area": "hardware", "what": "Raspberry Pi CM5 mainboard for the unmodified Framework 13 chassis: inverted CM5 on a rigid bridge, RP2350B embedded controller, NCS8803 eDP, M.2 NVMe, USB3. 8-layer, ~1,000 parts; RC2 at 0 DRC errors, 0 opens, 0 schematic-parity differences. Collaborative project.", "status": "Pre-fab audit open." },
+    { "name": "RF receiver front-end test board", "area": "hardware", "what": "Two-channel RF RX front end (AD8318 log detector, PE42562 switches, QPL9547 LNA, PE43711 attenuators, STM32G0B1). Schematic restructured into 20 pages with the netlist partition verified identical (191 nets, 232 components, 0 ERC).", "status": "Schematic complete; 4-layer 100x65 mm board planned." },
+    { "name": "Sensor and wireless-power boards (employer)", "area": "hardware", "what": "Time-of-flight lidar module (AFBR-S50, STM32L431, SHT45, BMP585) with its bare-metal C++ firmware; 103 kHz series-series inductive charger TX/RX pair (LM5106 H-bridge, LT8705A buck-boost, CAN) with LTspice models; battery carrier.", "status": "Shipped designs." },
+    { "name": "CyberGear driver reverse-engineering", "area": "hardware", "what": "KiCad schematic and PCB of Xiaomi's CyberGear micro-motor driver: GD32F303, 6EDL7141 gate driver, AS5047P encoder.", "status": "Public on GitHub." },
+    { "name": "Layout environment and placer", "area": "tooling", "what": "Routers, escape and fan-out generators, DDR3 tuning, current and spacing checks, SI/PI review, a decoupling placer benchmarked against human layouts on 8 open boards, and a hash-replayable record of every tool run and decision.", "status": "In daily use at Yaedo." },
+    { "name": "Board site generator and workbench", "area": "tooling", "what": "Static deliverable sites per client with viewers, DRC/ERC, stackup, fab packs and share links; a browser workbench with a KiCad-fork Docker image, canvases, checks and an LLM assistant.", "status": "In production for client deliverables." },
+    { "name": "Alpaca engine", "area": "trading", "what": "Python 3.13 / FastAPI / React / Postgres / Redis. Plans with attached exits, strategy plane with crash isolation and supervised restarts, 13 strategy modules behind one risk gate, ops console and trading terminal, phone and desktop widgets, OPRA options logger, nightly research runner. 172k lines of Python, 1,291 backend tests.", "status": "Live and paper, deployed on Linux with systemd." },
+    { "name": "Interactive Brokers engine", "area": "trading", "what": "Python 3.12, broker access isolated to one package, event-sourced plans, fake broker for tests, enforcer and reconcile loops, nightly Flex reconciliation, shadow mode. mypy --strict, hypothesis, 1,786 tests, 18 written specs.", "status": "Paper, ramping." },
+    { "name": "Research program", "area": "quant", "what": "88 study directories, 36 indexed, pre-registered with sha256; LightGBM and HAR-RV variance forecasting, Torch TCN minute-tape pretraining, LLM memorisation controls with a written paper; EDGAR, 8-K, Form 10 and tender data; point-in-time universes.", "status": "Ongoing nightly runs with a spend cap." },
+    { "name": "Earlier trading tooling", "area": "trading", "what": "GPU backtester across the Russell 2000 with GMM regime detection and Monte Carlo significance (stellaron); Playwright brokerage automation API and multi-user dashboard (narukami, inazuma); options strategy DSL with a two-way visual builder (archon); Schwab-style paper simulator with chaos injection (schwob).", "status": "Private repos, 2026." },
+    { "name": "rank32", "area": "math", "what": "Search for a rank-32 elliptic curve: C sieve across 10 cores, PARI/GP fake 2-descent and exact independence certificates, reconstruction of the K3 families behind the record curves. Re-certified the known rank 25 to 28 curves and certified a new fiber of rank at least 26.", "status": "Complete; no rank 32 found." },
+    { "name": "Delivery-robot fleet simulator", "area": "simulation", "what": "Discrete-event simulator with replay front end and a demand-to-fleet-size-to-unit-economics model.", "status": "Complete." }
+  ],
+  "stack": {
+    "eda": ["KiCad (patched 10.99 fork)", "kicad-cli", "LTspice", "JLC/LCSC turnkey", "impedance-controlled stackups"],
+    "languages": ["Python", "TypeScript", "C++", "C", "PARI/GP", "SQL"],
+    "systems": ["FastAPI", "React", "Next.js", "Postgres", "Redis", "Prisma", "systemd", "Docker", "Vercel"],
+    "quant": ["pandas/pyarrow parquet lake", "LightGBM", "scikit-learn", "PyTorch", "CuPy", "hypothesis", "mypy --strict"],
+    "llm": ["Anthropic API", "Claude Code CLI", "llama.cpp local models", "MCP"]
+  },
+  "working_style": "Spec first, then code. Pre-register before measuring. Pure functions for anything that can lose money. Byte-identical rebuilds as regression gates. Fixed prices and written readiness checks for client work.",
+  "open_to": ["Turnkey PCB and FPGA board design through Yaedo Hardware Design", "Conversations about trading-system and risk infrastructure", "Collaboration on EDA tooling and KiCad automation"],
+  "interests": ["PCB and FPGA design", "EDA tooling", "trading systems and market microstructure", "agents and MCP", "number theory"],
+  "now": "Finishing an 8-layer Kintex-7 capture board and a CM5 laptop mainboard at Yaedo; ramping the Interactive Brokers engine and the nightly research program at Vosburg Capital.",
   "links": {
     "github": "https://github.com/matthewguoo",
     "linkedin": "https://www.linkedin.com/in/matthewguoo/",
     "boardmiko": "https://www.boardmiko.com",
     "vosburg": "https://vosburgcapital.com"
   },
+  "notes_for_agents": "Figures above are taken from the actual repositories as of October 2026; most repositories are private, so ask Matthew through the contact tool if you need specifics or references. Client and employer names are intentionally omitted.",
   "contact_policy": "Messages sent through the contact tool reach Matthew directly. Include a way to reply. Short and specific gets answered first."
 }

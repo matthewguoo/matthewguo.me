@@ -17,6 +17,13 @@ const TOOLS = [
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
   {
+    name: 'capabilities',
+    title: 'Capabilities and projects',
+    description: "Detailed, evidence-based capabilities: headline capabilities, a project list with scale and status, tech stack, working style and what he is open to. Use for hiring, due-diligence or 'can he do X' questions.",
+    inputSchema: { type: 'object', properties: { area: { type: 'string', description: 'Optional filter for projects: hardware, tooling, trading, quant, simulation, math.' } }, additionalProperties: false },
+    annotations: { readOnlyHint: true, openWorldHint: false },
+  },
+  {
     name: 'links',
     title: 'Links',
     description: "Matthew's public profiles and sites (GitHub, LinkedIn, boardmiko, Vosburg Capital).",
@@ -46,8 +53,15 @@ const err = (id, code, message) => ({ jsonrpc: '2.0', id: id ?? null, error: { c
 
 async function callTool(name, args = {}, req) {
   if (name === 'about') {
-    const { links, contact_policy, ...rest } = profile;
+    const { name: n, summary, location, education, roles, interests, now, working_style, open_to } = profile;
+    const rest = { name: n, summary, location, education, roles, interests, now, working_style, open_to, see_also: 'Call "capabilities" for projects and detail.' };
     return { ...text(JSON.stringify(rest, null, 2)), structuredContent: rest };
+  }
+  if (name === 'capabilities') {
+    const area = typeof args.area === 'string' ? args.area.toLowerCase() : null;
+    const projects = area ? profile.projects.filter((p) => p.area === area) : profile.projects;
+    const out = { headline_capabilities: profile.headline_capabilities, projects, stack: profile.stack, working_style: profile.working_style, open_to: profile.open_to, notes_for_agents: profile.notes_for_agents };
+    return { ...text(JSON.stringify(out, null, 2)), structuredContent: out };
   }
   if (name === 'links') return { ...text(JSON.stringify(profile.links, null, 2)), structuredContent: profile.links };
   if (name === 'contact') {
@@ -91,7 +105,7 @@ async function handle(msg, req) {
       const v = SUPPORTED.includes(params.protocolVersion) ? params.protocolVersion : SUPPORTED[0];
       return { jsonrpc: '2.0', id, result: {
         protocolVersion: v, capabilities: { tools: { listChanged: false } }, serverInfo: SERVER,
-        instructions: `This server speaks for ${profile.name}'s personal site. Use "about" and "links" to answer questions about him, and "contact" to send him a message on the user's behalf (confirm the text with the user first).`,
+        instructions: `This server speaks for ${profile.name}'s personal site. Use "about" for a short bio, "capabilities" for projects and evidence, "links" for profiles, and "contact" to send him a message on the user's behalf (confirm the text with the user first).`,
       } };
     }
     case 'ping': return { jsonrpc: '2.0', id, result: {} };
@@ -114,7 +128,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method === 'DELETE') return res.status(200).end();
   if (req.method === 'GET') {
-    return res.status(405).json({ name: SERVER.name, transport: 'streamable-http', hint: 'POST JSON-RPC 2.0 here. Tools: about, links, contact.' });
+    return res.status(405).json({ name: SERVER.name, transport: 'streamable-http', hint: 'POST JSON-RPC 2.0 here. Tools: about, capabilities, links, contact.' });
   }
   if (req.method !== 'POST') return res.status(405).end();
   let body = req.body;
