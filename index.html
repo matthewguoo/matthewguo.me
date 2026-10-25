@@ -4,25 +4,48 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Matthew Guo</title>
-<meta name="description" content="Matthew Guo">
+<meta name="description" content="Matthew Guo. Chief Investment Officer at Vosburg Capital. Carnegie Mellon University.">
+<link rel="canonical" href="https://matthewguo.me/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Matthew Guo">
+<meta property="og:description" content="Matthew Guo. Chief Investment Officer at Vosburg Capital.">
+<meta property="og:url" content="https://matthewguo.me/">
+<meta property="og:site_name" content="Matthew Guo">
 <meta name="theme-color" content="#f5f5f5">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://matthewguo.me/#person",
+  "name": "Matthew Guo",
+  "url": "https://matthewguo.me/",
+  "jobTitle": "Chief Investment Officer",
+  "worksFor": { "@type": "Organization", "name": "Vosburg Capital", "url": "https://vosburgcapital.com/" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "Carnegie Mellon University" },
+  "sameAs": [
+    "https://github.com/matthewguoo",
+    "https://www.linkedin.com/in/matthewguoo/"
+  ]
+}
+</script>
 <style>
   :root {
-    --sakura:#8e2130; --ink:#1a1a1a; --ink-2:#333; --muted-1:#555; --muted-3:#888;
+    --sakura:#8e2130; --ink:#1a1a1a; --muted-1:#555; --muted-3:#888;
     --bg:#f5f5f5; --line-soft:#1a1a1a14;
     --font-display:Inter, system-ui, -apple-system, sans-serif;
     --font-body:"Noto Sans JP", Inter, system-ui, sans-serif;
   }
   * { box-sizing:border-box; }
   html, body { margin:0; background:var(--bg); color:var(--ink); }
-  body { font-family:var(--font-body); font-size:14px; line-height:1.6; -webkit-font-smoothing:antialiased; min-height:100dvh; position:relative; }
+  body { font-family:var(--font-body); font-size:14px; line-height:1.6; -webkit-font-smoothing:antialiased; min-height:100dvh; position:relative; overflow-x:hidden; }
   body::before { content:""; position:fixed; top:0; left:0; right:0; height:3px; background:var(--sakura); z-index:2; }
-  .guilloche { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.05; color:var(--ink);
-    background:url(/assets/guilloche.svg) top center / auto 150vh repeat; }
-  @media (max-width:720px) { .guilloche { opacity:.04; background-size:auto 110vh; } }
+  .sketch { position:fixed; right:-4vw; bottom:0; width:min(72vw, 1000px); opacity:.09; pointer-events:none; z-index:0; }
+  .sketch img { display:block; width:100%; height:auto; }
+  @media (max-width:720px) { .sketch { width:130vw; right:-30vw; bottom:5vh; opacity:.07; } }
   .page { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 28px; min-height:100dvh; display:flex; flex-direction:column; }
   header { display:flex; align-items:baseline; justify-content:space-between; padding:22px 0; border-bottom:1px solid var(--line-soft); font-family:var(--font-display); font-size:13px; }
   header .name { font-weight:600; color:var(--ink); }
@@ -35,19 +58,19 @@
 </style>
 </head>
 <body>
-<div class="guilloche" aria-hidden="true"></div>
+<div class="sketch" aria-hidden="true"><img src="/assets/sketch.webp" alt="" width="1200" height="800" decoding="async"></div>
 <div class="page">
   <header>
     <a class="name" href="/">Matthew Guo</a>
     <nav>
-      <a href="https://github.com/matthewguoo" rel="noopener">GitHub</a>
-      <a href="https://www.linkedin.com/in/matthewguoo/" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/matthewguoo" rel="me noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/matthewguoo/" rel="me noopener">LinkedIn</a>
     </nav>
   </header>
   <main>
     <h1>Matthew Guo</h1>
   </main>
-  <footer>© 2026</footer>
+  <footer>© 2026 Matthew Guo</footer>
 </div>
 </body>
 </html>
