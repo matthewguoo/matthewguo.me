@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Matthew Guo</title>
+<meta name="description" content="Matthew Guo. Hardware and systems engineer. Experience, capabilities and projects, filtered by what you're looking for.">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f5f5"><link rel="icon" href="/favicon.ico" sizes="32x32 48x48"><link rel="icon" type="image/png" sizes="32x32" href="/favicon.png"><link rel="apple-touch-icon" href="/assets/icon-180.png"><meta property="og:image" content="https://matthewguo.me/assets/og.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/site.css">
+<style>
+  main { max-width:760px; padding:48px 0 40px; }
+  .lede { color:var(--ink-2); margin:14px 0 0; max-width:62ch; }
+  .sec { font-family:var(--font-display); font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:600; color:var(--muted-3); margin:44px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line-soft); display:flex; justify-content:space-between; }
+  .sec span { font-weight:400; letter-spacing:0; text-transform:none; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 10px; }
+  .chip { font:inherit; font-family:var(--font-display); font-size:12.5px; font-weight:500; color:var(--ink); background:var(--surface); border:1px solid var(--line); padding:5px 10px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+  .chip:hover { border-color:var(--sakura); color:var(--sakura); }
+  .chip.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .chip small { font-family:var(--mono); font-size:10.5px; color:var(--muted-3); }
+  .chip.on small { color:#ddd; }
+  .q { display:flex; border:1px solid var(--line); background:var(--surface); max-width:420px; }
+  .q input { flex:1; font:inherit; font-size:14px; border:0; outline:0; padding:9px 12px; background:transparent; color:var(--ink); }
+  .q button { font:inherit; font-family:var(--font-display); font-size:12.5px; color:var(--muted-1); background:transparent; border:0; border-left:1px solid var(--line-soft); padding:0 12px; cursor:pointer; }
+  .q button:hover { color:var(--sakura); }
+  .hits { margin-top:18px; }
+  .hit-group { margin:0 0 16px; }
+  .hit-group h4 { font-family:var(--font-display); font-size:12.5px; font-weight:600; margin:0 0 4px; color:var(--ink-2); }
+  .hit-group ul { margin:0; padding-left:18px; color:var(--ink-2); }
+  .hit-group li { margin:3px 0; }
+  mark { background:#8e213022; color:inherit; padding:0 1px; }
+  .none { color:var(--muted-3); font-size:14px; }
+  /* timeline */
+  .tl { position:relative; margin:0; padding:0 0 0 24px; list-style:none; border-left:1px solid var(--line); }
+  .tl li { position:relative; padding:0 0 26px; }
+  .tl li::before { content:""; position:absolute; left:-28.5px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--bg); border:1.5px solid var(--sakura); }
+  .tl li.now::before { background:var(--sakura); }
+  .tl .when { font-family:var(--mono); font-size:12px; color:var(--muted-3); }
+  .tl h3 { font-family:var(--font-display); font-size:15px; font-weight:600; margin:2px 0 6px; }
+  .tl h3 span { font-weight:400; color:var(--muted-1); }
+  .tl ul { margin:0; padding-left:18px; color:var(--ink-2); }
+  .tl li li { padding:0; margin:3px 0; }
+  .tl li li::before { display:none; }
+  .filtering .tl li li { color:var(--muted-3); }
+  .filtering .tl li li.match { color:var(--ink); }
+  .edu { color:var(--ink-2); margin:0; }
+  details { border-top:1px solid var(--line-soft); padding:8px 0; }
+  details.sub { border:0; border-left:1px solid var(--line-soft); margin:4px 0 4px 10px; padding:4px 0 4px 14px; }
+  summary { cursor:pointer; font-family:var(--font-display); font-weight:500; font-size:14px; list-style:none; display:flex; align-items:center; gap:8px; }
+  summary::-webkit-details-marker { display:none; }
+  summary::before { content:""; width:6px; height:6px; border-right:1.5px solid var(--muted-3); border-bottom:1.5px solid var(--muted-3); transform:rotate(-45deg); transition:transform .15s; flex:none; }
+  details[open] > summary::before { transform:rotate(45deg); }
+  summary:hover { color:var(--sakura); }
+  details p { font-size:13.5px; color:var(--muted-1); margin:6px 0; }
+  details ul { margin:0; padding-left:18px; color:var(--ink-2); }
+  .projects { margin:0; padding:0; list-style:none; }
+  .projects li { padding:10px 0; border-top:1px solid var(--line-soft); }
+  .projects b { font-family:var(--font-display); font-weight:600; }
+  .projects .dim { color:var(--muted-3); font-size:12.5px; font-family:var(--mono); margin-left:8px; }
+  .projects p { margin:2px 0 0; color:var(--ink-2); }
+  .filtering .projects li { color:var(--muted-3); } .filtering .projects li p { color:var(--muted-3); }
+  .filtering .projects li.match, .filtering .projects li.match p { color:inherit; }
+  .filtering .projects li.match p { color:var(--ink-2); }
+  .cta { display:flex; border:1px solid var(--line); background:var(--surface); max-width:380px; margin-top:22px; font-family:var(--font-display); font-size:13px; font-weight:500; }
+  .cta a { flex:1; text-align:center; padding:10px 14px; color:var(--ink); }
+  .cta a + a { border-left:1px solid var(--line-soft); }
+  .cta a:hover { color:var(--sakura); background:var(--surface-soft); }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="site-head"><a class="home" href="/">matthewguo.me</a><nav><a href="https://www.boardmiko.com" rel="noopener">boardmiko</a><a href="https://github.com/matthewguoo" rel="me noopener">GitHub</a><a href="https://www.linkedin.com/in/matthewguoo/" rel="me noopener">LinkedIn</a><a href="https://x.com/pci_yae" rel="me noopener">X</a></nav></header>
+  <main>
+    <h1 id="name">Matthew Guo</h1>
+    <div class="meta" id="meta"></div>
+    <p class="lede" id="summary"></p>
+    <div class="cta"><a href="/reach">Message</a><a href="/reach#call">Book a call</a></div>
+
+    <div class="sec">What are you looking for? <span id="count"></span></div>
+    <div class="chips" id="chips"></div>
+    <div class="q"><input id="q" type="search" placeholder="or type anything: PCIe, Yocto, risk limits, CAN…" autocomplete="off"><button type="button" id="clear">Clear</button></div>
+    <div class="hits" id="hits"></div>
+
+    <div class="sec">Experience</div>
+    <ol class="tl" id="tl"></ol>
+    <p class="edu" id="edu"></p>
+
+    <div class="sec">Capabilities <span>same tree the MCP walks</span></div>
+    <div id="tree"></div>
+
+    <div class="sec">Projects</div>
+    <ul class="projects" id="projects"></ul>
+
+    <div class="sec">Open to</div>
+    <ul id="open" style="margin:0;padding-left:18px;color:var(--ink-2)"></ul>
+  </main>
+  <footer class="site-foot">© 2026 Matthew Guo</footer>
+</div>
+<script>
+(function(){
+  var TAGS=[
+    ['PCIe & high-speed',['pcie','thunderbolt','usb3','usb 3','10g','sfp','gmsl','mipi','signal integrity','impedance','crosstalk','length']],
+    ['FPGA',['fpga','kintex','gtx','lvcmos']],
+    ['SoC & carriers',['soc','carrier','cm4','cm5','orin','rk3588','panther','lpddr','ddr','chip-down','interposer']],
+    ['Flex & HDI',['flex','hdi','via-in-pad','bga','coverlay']],
+    ['Power',['power','pmic','nvdc','buck','boost','usb-c','supercap','ups','ldo','wireless']],
+    ['Sensors & cameras',['camera','lidar','sensor','imu','encoder','optical','load-cell']],
+    ['Firmware',['firmware','stm32','bare-metal','rtos','bootloader','c++','samd','rp2350','atmel']],
+    ['Embedded Linux',['yocto','linux','provisioning','fleet','flashing']],
+    ['Manufacturing',['dfm','ems','jlc','bom','fab','manufactur','ipc','halt','mtbf','assembly','cost']],
+    ['EDA tooling',['kicad','router','placer','eda','toolchain','workbench']],
+    ['Autonomy & robotics',['drone','robot','autonom','fanuc','abb','l4','perception','truss']],
+    ['Industrial I/O',['can','io-link','rs-422','rs-485','24 v','24v','din','m12','quadrature','solenoid','stepper']],
+    ['Trading systems',['trading','broker','execution','alpaca','interactive brokers','order','market data','p&l']],
+    ['Risk',['risk','drawdown','kill','halt','dead-man','reconcil','loss','exposure']],
+    ['Quant research',['research','pre-regist','backtest','lightgbm','parquet','edgar','holdout','placebo']],
+    ['Backend & infra',['fastapi','postgres','redis','systemd','docker','ci','deploy','mypy','pytest','vercel','next.js']],
+    ['LLM & agents',['llm','mcp','anthropic','model','agent','prompt','qwen']],
+    ['Leadership',['founded','manage','client','vendor','program','contractor','quote','firm']]
+  ];
+  var P, on={}, free='';
+  var $=function(id){return document.getElementById(id)};
+  var esc=function(s){return String(s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})};
+  var title=function(k){return k.replace(/_/g,' ')};
+  function keys(){ var k=[]; Object.keys(on).forEach(function(i){ if(on[i]) k=k.concat(TAGS[i][1]); }); if(free.length>1) k.push(free.toLowerCase()); return k; }
+  function matches(text,ks){ var t=text.toLowerCase(); return ks.some(function(k){return t.indexOf(k)>=0}); }
+  function hl(text,ks){ var out=esc(text); ks.forEach(function(k){ var re=new RegExp('('+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'); out=out.replace(re,'<mark></mark>'); }); return out; }
+  function walk(tree,prefix,fn){ Object.keys(tree).forEach(function(k){ var v=tree[k], p=prefix?prefix+'.'+k:k; fn(p,v); if(v.children) walk(v.children,p,fn); }); }
+  function countFor(ks){ var n=0; walk(P.capabilities,'',function(p,v){ (v.items||[]).forEach(function(i){ if(matches(i,ks)) n++; }); }); P.projects.forEach(function(x){ if(matches(JSON.stringify(x),ks)) n++; }); P.experience.forEach(function(e){ e.highlights.forEach(function(h){ if(matches(h,ks)) n++; }); }); return n; }
+  function render(){
+    var ks=keys(), active=ks.length>0;
+    document.body.classList.toggle('filtering',active);
+    $('count').textContent=active?countFor(ks)+' matches':'';
+    var h='';
+    if(active){
+      var groups=[];
+      walk(P.capabilities,'',function(p,v){ var hits=(v.items||[]).filter(function(i){return matches(i,ks)}); if(hits.length) groups.push({p:p,hits:hits}); });
+      groups.forEach(function(g){ h+='<div class="hit-group"><h4>'+esc(g.p.split('.').map(title).join(' / '))+'</h4><ul>'+g.hits.map(function(i){return '<li>'+hl(i,ks)+'</li>'}).join('')+'</ul></div>'; });
+      var pr=P.projects.filter(function(x){return matches(JSON.stringify(x),ks)});
+      if(pr.length) h+='<div class="hit-group"><h4>Projects</h4><ul>'+pr.map(function(x){return '<li><b>'+esc(x.name)+'</b>: '+hl(x.what,ks)+'</li>'}).join('')+'</ul></div>';
+      var ex=[]; P.experience.forEach(function(e){ e.highlights.forEach(function(x){ if(matches(x,ks)) ex.push(e.title+', '+e.org+': '+x); }); });
+      if(ex.length) h+='<div class="hit-group"><h4>Experience</h4><ul>'+ex.map(function(x){return '<li>'+hl(x,ks)+'</li>'}).join('')+'</ul></div>';
+      if(!h) h='<p class="none">Nothing matches that yet. Ask him: it may just not be written down.</p>';
+    }
+    $('hits').innerHTML=h;
+    document.querySelectorAll('.tl li li').forEach(function(li){ li.classList.toggle('match',active&&matches(li.textContent,ks)); });
+    document.querySelectorAll('.projects li').forEach(function(li){ li.classList.toggle('match',active&&matches(li.textContent,ks)); });
+    document.querySelectorAll('.chip').forEach(function(c,i){ c.classList.toggle('on',!!on[i]); });
+  }
+  fetch('/profile.json').then(function(r){return r.json()}).then(function(p){
+    P=p;
+    var cur=p.experience.filter(function(e){return !e.end}).map(function(e){return e.title+', '+e.org});
+    $('meta').innerHTML='<span>'+esc(p.headline)+'</span><span class="dot">·</span><span>'+esc(p.languages_spoken.join(', '))+'</span>';
+    $('summary').textContent=p.summary;
+    $('chips').innerHTML=TAGS.map(function(t,i){ return '<button type="button" class="chip" data-i="'+i+'">'+esc(t[0])+'<small>'+countFor(t[1])+'</small></button>'; }).join('');
+    $('tl').innerHTML=p.experience.map(function(e){ return '<li'+(e.end?'':' class="now"')+'><div class="when">'+esc(e.start)+' → '+(e.end?esc(e.end):'now')+' · '+esc(e.location)+'</div><h3>'+esc(e.title)+' <span>· '+esc(e.org)+'</span></h3><ul>'+e.highlights.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></li>'; }).join('');
+    $('edu').innerHTML=p.education.map(function(e){return '<b>'+esc(e.school)+'</b> · '+esc(e.program||'')+' <span style="color:var(--muted-3)">'+esc(e.status||'')+'</span>'}).join('<br>');
+    function tree(t,depth){ return Object.keys(t).map(function(k){ var v=t[k]; return '<details'+(depth?' class="sub"':'')+'><summary>'+esc(title(k))+'</summary>'+(v.summary?'<p>'+esc(v.summary)+'</p>':'')+(v.items?'<ul>'+v.items.map(function(i){return '<li>'+esc(i)+'</li>'}).join('')+'</ul>':'')+(v.children?tree(v.children,depth+1):'')+'</details>'; }).join(''); }
+    $('tree').innerHTML=tree(p.capabilities,0);
+    $('projects').innerHTML=p.projects.map(function(x){return '<li><b>'+esc(x.name)+'</b><span class="dim">'+esc(x.area)+' · '+esc(x.year)+'</span><p>'+esc(x.what)+' <span style="color:var(--muted-3)">'+esc(x.status)+'</span></p></li>'}).join('');
+    $('open').innerHTML=p.open_to.map(function(x){return '<li>'+esc(x)+'</li>'}).join('');
+    $('chips').addEventListener('click',function(e){ var c=e.target.closest('.chip'); if(!c) return; var i=c.getAttribute('data-i'); on[i]=!on[i]; render(); });
+    $('q').addEventListener('input',function(){ free=this.value.trim(); render(); });
+    $('clear').addEventListener('click',function(){ on={}; free=''; $('q').value=''; render(); });
+    var pre=new URLSearchParams(location.search).get('q'); if(pre){ $('q').value=pre; free=pre; }
+    render();
+  });
+})();
+</script>
+</body>
+</html>

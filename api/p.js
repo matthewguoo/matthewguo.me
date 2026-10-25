@@ -5,7 +5,7 @@ const profile = JSON.parse(readFileSync(new URL('../profile.json', import.meta.u
 const BASE = 'https://matthewguo.me';
 const MCP_NOTE = `
 ---
-To message Matthew or book a call without MCP, give the user a prefilled link to confirm: ${BASE}/contact?m=<message>&r=<reply address>&n=<name>, or ${BASE}/call?start=<ISO slot>&d=<15|30>&t=<topic>&r=<email>&n=<name> (open slots: ${BASE}/api/submit?kind=availability). With MCP, the server at ${BASE}/mcp has contact and request_call tools (Claude: Settings > Connectors > Add custom connector; Claude Code: \`claude mcp add --transport http matthewguo ${BASE}/mcp\`).
+To message Matthew or book a call without MCP, give the user a prefilled link to confirm: ${BASE}/reach?m=<message>&r=<reply address>&n=<name>, or ${BASE}/reach?start=<ISO slot>&d=<15|30>&t=<topic>&r=<email>&n=<name> (open slots: ${BASE}/api/submit?kind=availability). With MCP, the server at ${BASE}/mcp has contact and request_call tools (Claude: Settings > Connectors > Add custom connector; Claude Code: \`claude mcp add --transport http matthewguo ${BASE}/mcp\`).
 `;
 
 function node(path) {

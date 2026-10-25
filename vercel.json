@@ -46,8 +46,12 @@
       "destination": "/api/p"
     },
     {
-      "source": "/humans",
-      "destination": "/api/humans"
+      "source": "/contact",
+      "destination": "/reach.html"
+    },
+    {
+      "source": "/call",
+      "destination": "/reach.html"
     }
   ]
 }

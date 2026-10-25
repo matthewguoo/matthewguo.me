@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Reach Matthew</title>
+<meta name="robots" content="noindex">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f5f5"><link rel="icon" href="/favicon.ico" sizes="32x32 48x48"><link rel="icon" type="image/png" sizes="32x32" href="/favicon.png"><link rel="apple-touch-icon" href="/assets/icon-180.png"><meta property="og:image" content="https://matthewguo.me/assets/og.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/site.css">
+<style>
+  main { max-width:560px; padding:48px 0 40px; }
+  .lede { color:var(--ink-2); margin:0 0 22px; }
+  .mode { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--line-soft); }
+  .mode button { padding:11px 0; font-size:13px; border-right:1px solid var(--line-soft); }
+  .mode button:last-child { border-right:0; }
+  .mode button.on { background:var(--surface-soft); }
+  .row { display:grid; grid-template-columns:92px 1fr; border-bottom:1px solid var(--line-soft); }
+  .row label { padding:11px 14px; border-right:1px solid var(--line-soft); align-self:start; }
+  .row input, .row textarea, .row select { font:inherit; font-size:14px; color:var(--ink); border:0; outline:0; background:transparent; padding:10px 14px; width:100%; resize:vertical; }
+  .row textarea { min-height:120px; }
+  .row input:focus, .row textarea:focus { background:var(--surface-soft); }
+  .slots { padding:10px 14px; display:grid; gap:8px; }
+  .day { font-family:var(--font-display); font-size:12px; color:var(--muted-1); margin:4px 0 2px; }
+  .times { display:flex; flex-wrap:wrap; gap:6px; }
+  .t { font-family:var(--mono); font-size:12px; border:1px solid var(--line); padding:4px 8px; background:var(--surface); }
+  .t:hover { border-color:var(--sakura); }
+  .t.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .len { display:flex; gap:0; }
+  .len button { padding:10px 14px; font-size:13px; border-right:1px solid var(--line-soft); }
+  .act { display:grid; grid-template-columns:1fr 128px; align-items:stretch; }
+  .act span { padding:11px 14px; font-size:13px; color:var(--muted-3); }
+  .act span.err { color:var(--sakura); }
+  .act button { border-left:1px solid var(--line-soft); font-size:13px; }
+  .act button:disabled { color:var(--muted-3); background:transparent; cursor:default; }
+  .done { padding:16px 14px; }
+  .done a { display:inline-block; margin-top:8px; border-bottom:1px solid var(--line); }
+  .hp { position:absolute; left:-9999px; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="site-head"><a class="home" href="/">matthewguo.me</a><nav><a href="https://www.boardmiko.com" rel="noopener">boardmiko</a><a href="https://github.com/matthewguoo" rel="me noopener">GitHub</a><a href="https://www.linkedin.com/in/matthewguoo/" rel="me noopener">LinkedIn</a><a href="https://x.com/pci_yae" rel="me noopener">X</a></nav></header>
+  <main>
+    <h1 id="h">Reach Matthew</h1>
+    <p class="lede" id="lede">Nothing is sent until you press the button.</p>
+    <form class="box" id="f" autocomplete="on" novalidate>
+      <div class="mode"><button type="button" data-mode="message" id="mb">Message</button><button type="button" data-mode="call" id="cb">Book a call</button></div>
+      <div class="row"><label class="k" for="n">Name</label><input id="n" name="name" maxlength="100" placeholder="optional"></div>
+      <div class="row"><label class="k" for="r">Reply to</label><input id="r" name="reply_to" maxlength="200" placeholder="email, or a handle and where"></div>
+      <div class="row" id="msgrow"><label class="k" for="m">Message</label><textarea id="m" name="message" maxlength="4000"></textarea></div>
+      <div class="row" id="toprow" hidden><label class="k" for="t">Topic</label><textarea id="t" name="topic" maxlength="500" style="min-height:70px"></textarea></div>
+      <div class="row" id="lenrow" hidden><span class="k" style="padding:11px 14px;border-right:1px solid var(--line-soft)">Length</span><div class="len"><button type="button" data-len="30" class="on">30 min</button><button type="button" data-len="15">15 min</button></div></div>
+      <div class="row" id="slotrow" hidden><span class="k" style="padding:11px 14px;border-right:1px solid var(--line-soft)">Slot</span><div class="slots" id="slots"><span style="color:var(--muted-3);font-size:13px">Loading open slots…</span></div></div>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off">
+      <div class="act"><span id="s">He reads everything that comes through here.</span><button type="submit" id="b">Send</button></div>
+    </form>
+    <div class="box done" id="d" hidden></div>
+  </main>
+  <footer class="site-foot">© 2026 Matthew Guo</footer>
+</div>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var q=new URLSearchParams(location.search), g=function(k){return q.get(k)||''};
+  var mode='message', len=30, slot='', myTz=Intl.DateTimeFormat().resolvedOptions().timeZone, slotsLoaded=false;
+  var f=$('f'), s=$('s'), b=$('b'), d=$('d');
+  $('n').value=g('n'); $('r').value=g('r'); $('m').value=g('m'); $('t').value=g('t'); if(g('d')==='15') len=15;
+  function setMode(m){
+    mode=m; $('mb').classList.toggle('on',m==='message'); $('cb').classList.toggle('on',m==='call');
+    $('msgrow').hidden=m!=='message'; $('toprow').hidden=m!=='call'; $('lenrow').hidden=m!=='call'; $('slotrow').hidden=m!=='call';
+    $('r').placeholder=m==='call'?'email, for the confirmation':'email, or a handle and where';
+    b.textContent=m==='call'?'Request call':'Send'; $('h').textContent=m==='call'?'Book a call with Matthew':'Message Matthew';
+    $('lede').textContent=m==='call'?'Pick a slot. He confirms by email, usually within a day.':'Nothing is sent until you press the button.';
+    if(m==='call'&&!slotsLoaded) loadSlots();
+    if(history.replaceState) history.replaceState(null,'',m==='call'?'#call':location.pathname+location.search);
+  }
+  function loadSlots(){
+    slotsLoaded=true;
+    fetch('/api/submit?kind=availability').then(function(r){return r.json()}).then(function(a){
+      var byDay={}, order=[]; var want=g('start')?new Date(g('start')).getTime():0;
+      a.slots.forEach(function(x){ var dt=new Date(x.start); var day=dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}); if(!byDay[day]){byDay[day]=[];order.push(day);} byDay[day].push(x); });
+      var h=order.map(function(day){ return '<div><div class="day">'+day+'</div><div class="times">'+byDay[day].map(function(x){ var dt=new Date(x.start); var t=dt.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}); var on=want&&dt.getTime()===want; if(on) slot=x.start; return '<button type="button" class="t'+(on?' on':'')+'" data-start="'+x.start+'" title="'+x.local+'">'+t+'</button>'; }).join('')+'</div></div>'; }).join('');
+      $('slots').innerHTML=(h||'<span style="color:var(--muted-3);font-size:13px">No open slots in the next two weeks.</span>')+'<div class="day" style="margin-top:4px">Shown in '+myTz+'. His calendar: '+a.timezone+'.</div>';
+      if(want&&!slot){ s.textContent='The suggested time is no longer open; pick another.'; }
+    }).catch(function(){ $('slots').innerHTML='<span style="color:var(--sakura);font-size:13px">Could not load slots.</span>'; });
+  }
+  $('slots').addEventListener('click',function(e){ var t=e.target.closest('.t'); if(!t) return; document.querySelectorAll('.t').forEach(function(x){x.classList.remove('on')}); t.classList.add('on'); slot=t.getAttribute('data-start'); });
+  $('lenrow').addEventListener('click',function(e){ var t=e.target.closest('[data-len]'); if(!t) return; len=Number(t.getAttribute('data-len')); document.querySelectorAll('[data-len]').forEach(function(x){x.classList.toggle('on',x===t)}); });
+  document.querySelector('.mode').addEventListener('click',function(e){ var t=e.target.closest('[data-mode]'); if(t) setMode(t.getAttribute('data-mode')); });
+  document.querySelectorAll('[data-len]').forEach(function(x){x.classList.toggle('on',Number(x.getAttribute('data-len'))===len)});
+  f.addEventListener('submit',function(e){
+    e.preventDefault(); var body;
+    if(mode==='message'){ if(!$('r').value.trim()||!$('m').value.trim()){ s.textContent='Add a reply address and a message.'; s.className='err'; return; } body={kind:'contact',name:$('n').value,reply_to:$('r').value,message:$('m').value}; }
+    else { if(!slot||!$('r').value.trim()||!$('t').value.trim()){ s.textContent='Pick a slot, add your email and a topic.'; s.className='err'; return; } body={kind:'call',start:slot,duration_minutes:len,name:$('n').value,reply_to:$('r').value,topic:$('t').value,timezone:myTz}; }
+    body.website=f.website.value; b.disabled=true; s.className=''; s.textContent=mode==='call'?'Requesting…':'Sending…';
+    fetch('/api/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json()}).then(function(j){
+      if(j.ok){ f.hidden=true; d.hidden=false; d.textContent=j.result.text; if(j.result.ics){ var a=document.createElement('a'); a.href='data:text/calendar;charset=utf-8,'+encodeURIComponent(j.result.ics); a.download='call-with-matthew-guo.ics'; a.textContent='Add to your calendar (.ics, tentative)'; d.appendChild(a); } }
+      else { b.disabled=false; s.textContent=j.error||'Something went wrong.'; s.className='err'; }
+    }).catch(function(){ b.disabled=false; s.textContent='Network error. Try again.'; s.className='err'; });
+  });
+  setMode(location.hash==='#call'||location.pathname==='/call'||g('start')?'call':'message');
+})();
+</script>
+</body>
+</html>

@@ -88,6 +88,7 @@ Production execution engines and risk controls, built and operated.
 - linkedin: https://www.linkedin.com/in/matthewguoo/
 - boardmiko: https://www.boardmiko.com
 - vosburg: https://vosburgcapital.com
+- x: https://x.com/pci_yae
 
 ## Open to
 - Turnkey PCB, SoC and FPGA board design through YAEDO Design House
