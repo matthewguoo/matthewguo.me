@@ -47,11 +47,11 @@
     },
     {
       "source": "/contact",
-      "destination": "/reach.html"
+      "destination": "/reach"
     },
     {
       "source": "/call",
-      "destination": "/reach.html"
+      "destination": "/reach"
     }
   ]
 }
