@@ -2,7 +2,7 @@
 """Render profile.json to profile.md: a compact summary for agents that can only fetch pages."""
 import json
 d = json.load(open('profile.json'))
-L = [f"# {d['name']}", "", d['summary'], "", f"Location: {d['location']}. Languages: {', '.join(d['languages_spoken'])}.", f"Now: {d['now']}", "",
+L = [f"# {d['name']}", "", d['summary'], "", f"Location: {d['location']}. Languages: {', '.join(d['languages_spoken'])}.", "",
      "## Experience"]
 for e in d['experience']:
     L.append(f"- {e['title']}, {e['org']} ({e['start']} to {e['end'] or 'present'}). {e['highlights'][0]}")

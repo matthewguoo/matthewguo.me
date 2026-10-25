@@ -3,7 +3,6 @@
 Hardware and systems engineer who owns multi-board compute and sensing platforms end to end: architecture and interface definition, schematic and layout, bring-up, cross-domain EE/firmware/mechanical debug on deployed fleets, EMI/SI root cause, and vendor-managed production. Founder of YAEDO Design House (boardmiko.com), a 5 to 10 engineer PCB design firm with its own EDA toolchain. Also builds and runs production trading systems and the risk and research infrastructure around them as Chief Investment Officer of Vosburg Capital.
 
 Location: Mountain View, CA. Languages: English, Mandarin (native).
-Now: Owning the hardware for an L4 drone platform at Corvus Robotics; finishing a Kintex-7 capture board and a CM5 laptop mainboard at YAEDO; ramping the Interactive Brokers engine and nightly research at Vosburg Capital.
 
 ## Experience
 - Hardware Engineer, Corvus Robotics (2025-09 to present). Sole hardware engineer across multiple platforms; owns a distributed, high-bandwidth multi-board architecture (Intel Core Ultra compute, PCIe/Thunderbolt fabric) for a space-constrained L4 autonomous drone.

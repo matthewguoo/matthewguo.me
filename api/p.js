@@ -18,12 +18,12 @@ const url = (p) => `${BASE}/p/${p.replace(/\./g, '/')}`;
 
 function pageRoot() {
   const roles = profile.experience.filter((e) => !e.end).map((e) => `${e.title}, ${e.org}`).join('; ');
-  const md = [`# ${profile.name}`, '', profile.summary, '', `Location: ${profile.location}. Current: ${roles}.`, `Now: ${profile.now}`, '',
+  const md = [`# ${profile.name}`, '', profile.summary, '', `Location: ${profile.location}. Current: ${roles}.`, 
     '## Explore (each is a small page)', `- Experience and education: ${BASE}/p/experience`, `- Projects: ${BASE}/p/projects (filter: ?area=hardware|tooling|trading|quant|simulation)`, `- Search: ${BASE}/p/search?q=<keyword>`, '',
     '## Capabilities (one page per branch; each page holds its whole subtree)',
     ...Object.entries(profile.capabilities).map(([k, v]) => `- ${title(k)}: ${v.summary || ''} -> ${url(k)}`), '',
     `## Links`, ...Object.entries(profile.links).map(([k, v]) => `- ${k}: ${v}`), '', `Open to: ${profile.open_to.join('; ')}.`, MCP_NOTE].join('\n');
-  const json = { name: profile.name, summary: profile.summary, location: profile.location, now: profile.now, open_to: profile.open_to, links: profile.links,
+  const json = { name: profile.name, summary: profile.summary, location: profile.location, open_to: profile.open_to, links: profile.links,
     pages: { experience: `${BASE}/p/experience`, projects: `${BASE}/p/projects`, search: `${BASE}/p/search?q=` },
     capabilities: Object.fromEntries(Object.entries(profile.capabilities).map(([k, v]) => [k, { summary: v.summary || null, url: url(k) }])), mcp: `${BASE}/mcp` };
   return { md, json };

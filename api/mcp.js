@@ -93,9 +93,9 @@ const err = (id, code, message) => ({ jsonrpc: '2.0', id: id ?? null, error: { c
 async function callTool(name, args = {}, req) {
   switch (name) {
     case 'about': {
-      const { name: n, headline, summary, location, languages_spoken, education, now, working_style, open_to } = profile;
+      const { name: n, headline, summary, location, languages_spoken, education, working_style, open_to } = profile;
       const roles = profile.experience.filter((e) => !e.end).map((e) => `${e.title}, ${e.org} (since ${e.start})`);
-      return both({ name: n, headline, summary, location, current_roles: roles, education, languages_spoken, now, working_style, open_to, see_also: 'experience, capabilities (tree), search, projects, links, contact' });
+      return both({ name: n, headline, summary, location, current_roles: roles, education, languages_spoken, working_style, open_to, see_also: 'experience, capabilities (tree), search, projects, links, contact' });
     }
     case 'experience': return both({ experience: profile.experience, education: profile.education });
     case 'capabilities': {
