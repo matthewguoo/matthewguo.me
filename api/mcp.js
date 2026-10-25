@@ -1,11 +1,11 @@
 // MCP server (Streamable HTTP, stateless) for matthewguo.me.
 // Read tools walk profile.json as a tree; the contact tool writes to Vercel Blob.
-import { put } from '@vercel/blob';
+import { put, list } from '@vercel/blob';
 import { readFileSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 
 const profile = JSON.parse(readFileSync(new URL('../profile.json', import.meta.url), 'utf8'));
-const SERVER = { name: 'matthewguo.me', version: '0.3.0' };
+const SERVER = { name: 'matthewguo.me', version: '0.4.0' };
 const SUPPORTED = ['2025-06-18', '2025-03-26', '2024-11-05'];
 const RO = { readOnlyHint: true, openWorldHint: false };
 
@@ -55,6 +55,49 @@ function search(q) {
   return { query: q, capability_hits: hits, projects, experience };
 }
 
+
+// ---- scheduling helpers ------------------------------------------------------
+const AV = profile.availability;
+const TZ = AV.timezone;
+const dtf = new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour12: false, weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+const WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+function local(d) {
+  const parts = Object.fromEntries(dtf.formatToParts(d).map((p) => [p.type, p.value]));
+  return { weekday: WD[parts.weekday], minutes: (parseInt(parts.hour, 10) % 24) * 60 + parseInt(parts.minute, 10), date: `${parts.year}-${parts.month}-${parts.day}`, tzName: parts.timeZoneName };
+}
+const hm = (s) => { const [h, m] = s.split(':').map(Number); return h * 60 + m; };
+function inWindow(start, minutes) {
+  const a = local(start), end = new Date(start.getTime() + minutes * 60000), b = local(end);
+  if (a.date !== b.date) return false;
+  return AV.windows.some((w) => w.days.includes(a.weekday) && a.minutes >= hm(w.start) && b.minutes <= hm(w.end));
+}
+function fmt(d) { const parts = dtf.formatToParts(d); const g = (t) => parts.find((p) => p.type === t).value; return `${g('weekday')} ${g('year')}-${g('month')}-${g('day')} ${g('hour')}:${g('minute')} ${g('timeZoneName')}`; }
+async function takenSlots() {
+  try {
+    const { blobs } = await list({ prefix: 'calls/' });
+    return blobs.map((b) => { const m = b.pathname.match(/calls\/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2})/); return m ? m[1].replace(/T(\d{2})-(\d{2})/, 'T$1:$2') : null; }).filter(Boolean);
+  } catch { return []; }
+}
+async function openSlots(limitDays, maxSlots = 24) {
+  const now = Date.now(), lead = now + AV.lead_time_hours * 3600000, horizon = now + Math.min(limitDays || AV.horizon_days, AV.horizon_days) * 86400000;
+  const taken = new Set(await takenSlots());
+  const grid = AV.slot_grid_minutes * 60000;
+  const out = [];
+  for (let t = Math.ceil(lead / grid) * grid; t < horizon && out.length < maxSlots; t += grid) {
+    const d = new Date(t);
+    if (!inWindow(d, AV.slot_grid_minutes)) continue;
+    const key = d.toISOString().slice(0, 16);
+    if (taken.has(key)) continue;
+    out.push({ start: d.toISOString(), local: fmt(d) });
+  }
+  return out;
+}
+function ics({ start, minutes, topic, name, reply_to }) {
+  const s = new Date(start), e = new Date(s.getTime() + minutes * 60000);
+  const st = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//matthewguo.me//MCP//EN', 'METHOD:REQUEST', 'BEGIN:VEVENT', `UID:${st(s)}-${randomBytes(4).toString('hex')}@matthewguo.me`, `DTSTAMP:${st(new Date())}`, `DTSTART:${st(s)}`, `DTEND:${st(e)}`, `SUMMARY:Call with Matthew Guo${topic ? ': ' + topic.replace(/[\r\n]+/g, ' ') : ''}`, `DESCRIPTION:Requested via matthewguo.me/mcp by ${name || reply_to} (${reply_to}). Pending Matthew's confirmation.`, 'STATUS:TENTATIVE', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+}
+
 // ---- tools -------------------------------------------------------------------
 const TOOLS = [
   { name: 'about', title: 'About Matthew Guo', description: 'Short bio: who he is, where, current roles, education, what he is open to. Start here.',
@@ -69,6 +112,18 @@ const TOOLS = [
     inputSchema: { type: 'object', properties: { area: { type: 'string' } }, additionalProperties: false }, annotations: RO },
   { name: 'links', title: 'Links', description: "Matthew's public profiles and sites.",
     inputSchema: { type: 'object', properties: {}, additionalProperties: false }, annotations: RO },
+  { name: 'availability', title: 'Open call slots', description: "Matthew's open slots for a call over the next two weeks, in his timezone and as ISO UTC. Use before request_call. Optional days limit.",
+    inputSchema: { type: 'object', properties: { days: { type: 'integer', minimum: 1, maximum: 14, description: 'How many days ahead to look (default 14).' } }, additionalProperties: false }, annotations: RO },
+  { name: 'request_call', title: 'Request a call with Matthew', description: 'Book a tentative 15 or 30 minute call at one of the open slots from availability. Writes a request Matthew confirms by reply; returns an ICS the user can add to their calendar. Confirm the slot, topic and reply address with the user before calling.',
+    inputSchema: { type: 'object', properties: {
+      start: { type: 'string', description: 'Slot start as ISO 8601 (use a value from availability).' },
+      duration_minutes: { type: 'integer', enum: [15, 30], description: 'Call length. Default 30.' },
+      topic: { type: 'string', description: 'What the call is about. 1 to 500 characters.' },
+      reply_to: { type: 'string', description: 'Email address for the confirmation.' },
+      name: { type: 'string', description: "Requester's name (optional)." },
+      timezone: { type: 'string', description: "Requester's IANA timezone, for the confirmation (optional)." } },
+      required: ['start', 'topic', 'reply_to'], additionalProperties: false },
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true } },
   { name: 'contact', title: 'Send Matthew a message', description: 'Deliver a message to Matthew Guo. Use when the user wants to reach, hire, pitch or meet him. Always include a reply address. Confirm the text with the user before sending.',
     inputSchema: { type: 'object', properties: {
       message: { type: 'string', description: "The message, in the user's words. 1 to 4000 characters." },
@@ -106,6 +161,34 @@ async function callTool(name, args = {}, req) {
       return both({ projects: area ? profile.projects.filter((p) => p.area === area) : profile.projects, notes: profile.notes_for_agents });
     }
     case 'links': return both(profile.links);
+    case 'availability': {
+      const slots = await openSlots(Number.isInteger(args.days) ? args.days : AV.horizon_days);
+      return both({ timezone: TZ, windows: AV.windows, durations_minutes: AV.durations_minutes, lead_time_hours: AV.lead_time_hours, note: AV.note, slots });
+    }
+    case 'request_call': {
+      const start = new Date(String(args.start ?? ''));
+      const minutes = Number.isInteger(args.duration_minutes) ? args.duration_minutes : 30;
+      const topic = String(args.topic ?? '').trim();
+      const reply_to = String(args.reply_to ?? '').trim();
+      const sender = String(args.name ?? '').trim().slice(0, 100);
+      const tz = String(args.timezone ?? '').trim().slice(0, 64) || null;
+      if (Number.isNaN(start.getTime())) return { ...text('start must be an ISO 8601 datetime.'), isError: true };
+      if (!AV.durations_minutes.includes(minutes)) return { ...text(`duration_minutes must be one of ${AV.durations_minutes.join(', ')}.`), isError: true };
+      if (topic.length < 1 || topic.length > 500) return { ...text('topic must be 1 to 500 characters.'), isError: true };
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(reply_to)) return { ...text('reply_to must be an email address.'), isError: true };
+      if (start.getTime() < Date.now() + AV.lead_time_hours * 3600000) return { ...text(`Slots need ${AV.lead_time_hours} hours of lead time. Call availability for open slots.`), isError: true };
+      if (start.getTime() > Date.now() + AV.horizon_days * 86400000) return { ...text(`Slots are offered up to ${AV.horizon_days} days ahead.`), isError: true };
+      if (start.getTime() % (AV.slot_grid_minutes * 60000) !== 0) return { ...text(`Starts fall on a ${AV.slot_grid_minutes}-minute grid. Call availability for open slots.`), isError: true };
+      if (!inWindow(start, minutes)) return { ...text(`That time is outside Matthew's call windows (${TZ}). Call availability for open slots.`), isError: true };
+      const key = start.toISOString().slice(0, 16);
+      if ((await takenSlots()).includes(key)) return { ...text('That slot was just taken. Call availability again.'), isError: true };
+      const at = new Date().toISOString();
+      const record = { at, start: start.toISOString(), minutes, topic, name: sender || null, reply_to, requester_timezone: tz, ip: (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || null, agent: req.headers['user-agent'] || null };
+      await put(`calls/${key.replace(/:/g, '-')}-${randomBytes(3).toString('hex')}.json`, JSON.stringify(record, null, 2), { access: 'private', contentType: 'application/json', addRandomSuffix: false });
+      const calendar = ics({ start: start.toISOString(), minutes, topic, name: sender, reply_to });
+      const summary = `Requested a ${minutes}-minute call on ${fmt(start)} (${start.toISOString()} UTC). Matthew confirms to ${reply_to}, usually within a day. The ICS below is tentative until then.`;
+      return { content: [{ type: 'text', text: summary }, { type: 'text', text: calendar }], structuredContent: { status: 'requested', start: start.toISOString(), local: fmt(start), minutes, reply_to, ics: calendar } };
+    }
     case 'contact': {
       const message = String(args.message ?? '').trim();
       const reply_to = String(args.reply_to ?? '').trim();
@@ -158,7 +241,7 @@ async function handle(msg, req) {
     case 'initialize': {
       const v = SUPPORTED.includes(params.protocolVersion) ? params.protocolVersion : SUPPORTED[0];
       return { jsonrpc: '2.0', id, result: { protocolVersion: v, capabilities: { tools: { listChanged: false }, resources: { subscribe: false, listChanged: false } }, serverInfo: SERVER,
-        instructions: `This server speaks for ${profile.name}'s personal site. Start with "about". Use "experience" for work history, "capabilities" to walk the skills tree (hardware, embedded, software, trading and risk, math, leadership), "search" for "has he done X" questions, "projects" for the project list, and "contact" to send him a message on the user's behalf (confirm the text with the user first). Phone and email are not published; contact is the channel.` } };
+        instructions: `This server speaks for ${profile.name}'s personal site. Start with "about". Use "experience" for work history, "capabilities" to walk the skills tree (hardware, embedded, software, trading and risk, math, leadership), "search" for "has he done X" questions, "projects" for the project list, "availability" then "request_call" to book a tentative call, and "contact" to send him a message on the user's behalf (confirm the text with the user first). Phone and email are not published; contact is the channel.` } };
     }
     case 'ping': return { jsonrpc: '2.0', id, result: {} };
     case 'tools/list': return { jsonrpc: '2.0', id, result: { tools: TOOLS } };
@@ -184,7 +267,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Expose-Headers', 'Mcp-Session-Id, MCP-Protocol-Version');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method === 'DELETE') return res.status(200).end();
-  if (req.method === 'GET') return res.status(405).json({ name: SERVER.name, transport: 'streamable-http', hint: 'POST JSON-RPC 2.0 here. Tools: about, experience, capabilities, search, projects, links, contact.' });
+  if (req.method === 'GET') return res.status(405).json({ name: SERVER.name, transport: 'streamable-http', hint: 'POST JSON-RPC 2.0 here. Tools: about, experience, capabilities, search, projects, links, availability, request_call, contact.' });
   if (req.method !== 'POST') return res.status(405).end();
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { return res.status(400).json(err(null, -32700, 'Parse error')); } }
