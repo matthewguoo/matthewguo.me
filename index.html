@@ -4,134 +4,50 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Matthew Guo</title>
-<meta name="description" content="Matthew Guo. Personal site.">
-<meta property="og:title" content="Matthew Guo">
-<meta property="og:description" content="Personal site.">
+<meta name="description" content="Matthew Guo">
 <meta name="theme-color" content="#f5f5f5">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='1.5' y='1.5' width='29' height='29' fill='white' stroke='%238e2130' stroke-width='2'/%3E%3Ctext x='16' y='23' font-size='19' text-anchor='middle' fill='%238e2130' font-family='serif' font-weight='600'%3E郭%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&family=Noto+Serif+JP:wght@600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --sakura:#8e2130; --sakura-dark:#6e1a26; --sakura-soft:#d09aa4; --wash:#8e21301f;
-    --ink:#1a1a1a; --ink-2:#333; --muted-1:#555; --muted-2:#666; --muted-3:#888;
-    --bg:#f5f5f5; --surface:#fff; --surface-soft:#f9f5f9;
-    --line:#1a1a1a24; --line-soft:#1a1a1a14;
+    --sakura:#8e2130; --ink:#1a1a1a; --ink-2:#333; --muted-1:#555; --muted-3:#888;
+    --bg:#f5f5f5; --line-soft:#1a1a1a14;
     --font-display:Inter, system-ui, -apple-system, sans-serif;
     --font-body:"Noto Sans JP", Inter, system-ui, sans-serif;
-    --font-serif:Georgia, "Noto Serif JP", serif;
-    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
   * { box-sizing:border-box; }
   html, body { margin:0; background:var(--bg); color:var(--ink); }
-  body { font-family:var(--font-body); font-size:13.5px; line-height:1.6; -webkit-font-smoothing:antialiased; padding:0 16px; }
-  body::before { content:""; position:fixed; top:0; left:0; right:0; height:3px; background:var(--sakura); z-index:40; }
-  a { color:var(--sakura); text-decoration:none; }
-  a:hover { text-decoration:underline; }
-
-  .page {
-    max-width:1200px; margin:0 auto; min-height:100dvh; background:var(--surface);
-    border-left:1px solid var(--line-soft); border-right:1px solid var(--line-soft);
-    display:grid; grid-template-rows:auto 1fr auto auto;
-  }
-  @media (min-width:800px) { .page { height:100dvh; overflow:hidden; } }
-
-  /* strip --------------------------------------------------------------- */
-  .strip { display:flex; align-items:center; gap:22px; padding:14px 28px; border-bottom:1px solid var(--line-soft); }
-  .brand { display:flex; align-items:center; gap:10px; color:var(--ink); }
-  .brand:hover { text-decoration:none; }
-  .mark { display:inline-flex; width:28px; height:28px; border:1.5px solid var(--sakura); color:var(--sakura); font-family:var(--font-serif); font-weight:600; font-size:17px; align-items:center; justify-content:center; flex:none; background:var(--surface); }
-  .mark.small { width:18px; height:18px; font-size:11px; border-width:1px; }
-  .brand-text { display:flex; flex-direction:column; line-height:1.1; }
-  .brand-jp { font-family:var(--font-serif); font-size:13px; font-weight:600; letter-spacing:.04em; white-space:nowrap; }
-  .brand-en { font-family:var(--font-display); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2); }
-  .strip nav { margin-left:auto; display:flex; gap:18px; font-family:var(--font-display); font-size:12.5px; white-space:nowrap; }
-  .strip nav a { color:var(--muted-1); }
-  .strip nav a:hover { color:var(--sakura); text-decoration:none; }
-
-  /* hero ---------------------------------------------------------------- */
-  .hero { position:relative; display:flex; flex-direction:column; justify-content:center; padding:40px 28px; border-bottom:1px solid var(--line-soft); min-height:0; overflow:hidden; }
-  .hero::before {
-    content:""; position:absolute; inset:0; pointer-events:none;
-    background-image:linear-gradient(var(--line-soft) 1px, transparent 1px), linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
-    background-size:64px 64px; background-position:-1px -1px;
-    -webkit-mask-image:linear-gradient(90deg, transparent 35%, #000 100%); mask-image:linear-gradient(90deg, transparent 35%, #000 100%);
-  }
-  .hero > * { position:relative; }
-  .eyebrow { font-family:var(--font-display); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--sakura); font-weight:600; margin-bottom:14px; }
-  h1 { font-family:var(--font-display); font-size:clamp(34px, 5vw, 60px); font-weight:600; letter-spacing:-0.025em; line-height:1.02; margin:0 0 18px; }
-  h1 .jp { display:block; font-family:var(--font-serif); font-weight:600; font-size:.42em; letter-spacing:.08em; color:var(--muted-2); margin-top:10px; }
-  .lede { font-family:var(--font-serif); font-style:italic; font-size:16px; color:var(--muted-1); margin:0; max-width:56ch; line-height:1.55; }
-  .hero-foot { margin-top:28px; display:flex; gap:18px; align-items:center; font-family:var(--mono); font-size:12px; color:var(--muted-3); }
-  .hero-foot .sq { width:10px; height:10px; background:var(--sakura); display:inline-block; }
-
-  /* grid ---------------------------------------------------------------- */
-  .grid { display:grid; grid-template-columns:1fr; }
-  section { padding:22px 28px 26px; border-bottom:1px solid var(--line-soft); }
-  section h2 { font-family:var(--font-display); font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:600; color:var(--muted-2); margin:0 0 12px; }
-  section p { margin:0 0 8px; max-width:52ch; color:var(--ink-2); }
-  section p:last-child { margin-bottom:0; }
-  .links { list-style:none; margin:0; padding:0; }
-  .links li { padding:8px 0; border-top:1px solid var(--line-soft); display:grid; grid-template-columns:1fr auto; column-gap:16px; align-items:baseline; }
-  .links li:last-child { border-bottom:1px solid var(--line-soft); }
-  .links a { color:var(--ink); font-family:var(--font-display); font-weight:500; }
-  .links a:hover { color:var(--sakura); text-decoration:none; }
-  .links .mono { font-family:var(--mono); font-size:12px; color:var(--muted-3); }
-  .soon { display:inline-block; padding:2px 7px; border-radius:3px; font-size:11.5px; font-weight:500; line-height:16px; font-family:var(--font-display); background:var(--wash); color:var(--sakura); }
-  @media (min-width:800px) {
-    .grid { grid-template-columns:1.3fr 1fr 0.8fr; }
-    .grid > section + section { border-left:1px solid var(--line-soft); }
-  }
-
-  footer { padding:16px 28px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--muted-3); }
-  .foot-brand { display:inline-flex; align-items:center; gap:8px; color:var(--muted-1); font-family:var(--font-display); }
-  footer .mono { font-family:var(--mono); }
+  body { font-family:var(--font-body); font-size:14px; line-height:1.6; -webkit-font-smoothing:antialiased; min-height:100dvh; position:relative; }
+  body::before { content:""; position:fixed; top:0; left:0; right:0; height:3px; background:var(--sakura); z-index:2; }
+  .guilloche { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.05; color:var(--ink);
+    background:url(/assets/guilloche.svg) top center / auto 150vh repeat; }
+  @media (max-width:720px) { .guilloche { opacity:.04; background-size:auto 110vh; } }
+  .page { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 28px; min-height:100dvh; display:flex; flex-direction:column; }
+  header { display:flex; align-items:baseline; justify-content:space-between; padding:22px 0; border-bottom:1px solid var(--line-soft); font-family:var(--font-display); font-size:13px; }
+  header .name { font-weight:600; color:var(--ink); }
+  header nav { display:flex; gap:20px; }
+  a { color:var(--muted-1); text-decoration:none; }
+  a:hover { color:var(--sakura); }
+  main { flex:1; display:flex; flex-direction:column; justify-content:center; padding:60px 0; }
+  h1 { font-family:var(--font-display); font-size:clamp(32px, 5vw, 56px); font-weight:600; letter-spacing:-0.025em; line-height:1.05; margin:0; }
+  footer { padding:18px 0 24px; border-top:1px solid var(--line-soft); font-size:12px; color:var(--muted-3); }
 </style>
 </head>
 <body>
+<div class="guilloche" aria-hidden="true"></div>
 <div class="page">
-  <header class="strip">
-    <a class="brand" href="/">
-      <span class="mark">郭</span>
-      <span class="brand-text"><span class="brand-jp">郭 Matthew Guo</span><span class="brand-en">matthewguo.me</span></span>
-    </a>
+  <header>
+    <a class="name" href="/">Matthew Guo</a>
     <nav>
-      <a href="https://github.com/matthewguoo" rel="noopener">GitHub ↗</a>
-      <a href="https://www.linkedin.com/in/matthewguoo/" rel="noopener">LinkedIn ↗</a>
+      <a href="https://github.com/matthewguoo" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/matthewguoo/" rel="noopener">LinkedIn</a>
     </nav>
   </header>
-
-  <div class="hero">
-    <div class="eyebrow">Personal site</div>
-    <h1>Matthew Guo<span class="jp">郭</span></h1>
-    <p class="lede">There is nothing here yet. Writing, projects and notes will collect on this page over time.</p>
-    <div class="hero-foot"><span class="sq"></span><span>2026 · under construction</span></div>
-  </div>
-
-  <div class="grid">
-    <section>
-      <h2>About</h2>
-      <p>Coming soon.</p>
-    </section>
-    <section>
-      <h2>Elsewhere</h2>
-      <ul class="links">
-        <li><a href="https://github.com/matthewguoo" rel="noopener">GitHub</a><span class="mono">matthewguoo</span></li>
-        <li><a href="https://www.linkedin.com/in/matthewguoo/" rel="noopener">LinkedIn</a><span class="mono">matthewguoo</span></li>
-        <li><a href="https://vosburgcapital.com" rel="noopener">Vosburg Capital</a><span class="mono">CIO</span></li>
-      </ul>
-    </section>
-    <section>
-      <h2>Writing</h2>
-      <p><span class="soon">Soon</span></p>
-    </section>
-  </div>
-
-  <footer>
-    <span class="foot-brand"><span class="mark small">郭</span> Matthew Guo</span>
-    <span class="mono">© 2026</span>
-  </footer>
+  <main>
+    <h1>Matthew Guo</h1>
+  </main>
+  <footer>© 2026</footer>
 </div>
 </body>
 </html>
