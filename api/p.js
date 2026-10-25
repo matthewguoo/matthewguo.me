@@ -17,7 +17,7 @@ function pageRoot() {
   const roles = profile.experience.filter((e) => !e.end).map((e) => `${e.title}, ${e.org}`).join('; ');
   const md = [`# ${profile.name}`, '', profile.summary, '', `Location: ${profile.location}. Current: ${roles}.`, `Now: ${profile.now}`, '',
     '## Explore (each is a small page)', `- Experience and education: ${BASE}/p/experience`, `- Projects: ${BASE}/p/projects (filter: ?area=hardware|tooling|trading|quant|simulation)`, `- Search: ${BASE}/p/search?q=<keyword>`, '',
-    '## Capabilities (tree; follow a link for detail)',
+    '## Capabilities (one page per branch; each page holds its whole subtree)',
     ...Object.entries(profile.capabilities).map(([k, v]) => `- ${title(k)}: ${v.summary || ''} -> ${url(k)}`), '',
     `## Links`, ...Object.entries(profile.links).map(([k, v]) => `- ${k}: ${v}`), '', `Open to: ${profile.open_to.join('; ')}.`, MCP_NOTE].join('\n');
   const json = { name: profile.name, summary: profile.summary, location: profile.location, now: profile.now, open_to: profile.open_to, links: profile.links,
@@ -31,9 +31,11 @@ function pageNode(path) {
   const md = [`# ${crumbs.map(title).join(' / ')}`, ''];
   if (n.summary) md.push(n.summary, '');
   if (n.items) md.push(...n.items.map((i) => `- ${i}`), '');
-  if (n.children) md.push('## Deeper', ...Object.entries(n.children).map(([k, v]) => `- ${title(k)}: ${v.summary || (v.items ? v.items.length + ' items' : '')} -> ${url(path + '.' + k)}`), '');
+  // Render the whole subtree inline: fetch tools often cannot follow links found inside a page.
+  const render = (tree, prefix, depth) => { for (const [k, v] of Object.entries(tree)) { md.push(`${'#'.repeat(Math.min(2 + depth, 6))} ${title(k)}`); if (v.summary) md.push(v.summary); if (v.items) md.push(...v.items.map((i) => `- ${i}`)); md.push(`(own page: ${url(prefix + '.' + k)})`, ''); if (v.children) render(v.children, prefix + '.' + k, depth + 1); } };
+  if (n.children) render(n.children, path, 1);
   md.push(`Up: ${crumbs.length > 1 ? url(crumbs.slice(0, -1).join('.')) : BASE + '/p'}`, MCP_NOTE);
-  const json = { path, summary: n.summary || null, items: n.items || null, children: n.children ? Object.fromEntries(Object.entries(n.children).map(([k, v]) => [k, { summary: v.summary || null, url: url(path + '.' + k) }])) : null };
+  const json = { path, summary: n.summary || null, items: n.items || null, children: n.children || null };
   return { md: md.join('\n'), json };
 }
 function pageExperience() {

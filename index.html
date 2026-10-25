@@ -134,7 +134,7 @@
     'codex': 'codex mcp add '+name+' --url '+url,
     'vscode': "code --add-mcp '"+JSON.stringify({name:name,type:'http',url:url})+"'",
     'json': JSON.stringify({mcpServers:{matthewguo:{type:'http',url:url}}},null,2),
-    'prompt': 'Please learn about Matthew Guo by fetching https://matthewguo.me/p and following the links on that page for whatever I ask about (it is a small index: experience, projects, search, and a capability tree with one page per branch; every page lists its children as URLs). Start with a short summary of who he is and what he has built. If I want to message him or book a call, that needs his MCP server at https://matthewguo.me/mcp; tell me how to add it in this app if you cannot add connectors yourself.'
+    'prompt': 'Please learn about Matthew Guo from these pages (small, plain text): index https://matthewguo.me/p ; experience https://matthewguo.me/p/experience ; projects https://matthewguo.me/p/projects ; capabilities by branch: https://matthewguo.me/p/hardware , https://matthewguo.me/p/embedded_and_firmware , https://matthewguo.me/p/software , https://matthewguo.me/p/trading_systems_and_risk , https://matthewguo.me/p/leadership_and_programs ; everything in one file if you prefer: https://matthewguo.me/profile.md . Read the index first, then only the pages relevant to what I ask. Start with a short summary of who he is and what he has built. If I want to message him or book a call, that needs his MCP server at https://matthewguo.me/mcp ; tell me how to add it in this app if you cannot add connectors yourself.'
   };
   var bar=document.getElementById('mcp-bar'), lit=null, timer;
   function flash(b){

@@ -1,4 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://matthewguo.me/</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/experience</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/projects</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/profile.md</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/mcp</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/interfaces</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/interfaces/high_speed_serial</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/interfaces/memory</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/interfaces/display_and_video</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/interfaces/control_and_fieldbus</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/interfaces/power</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/interfaces/rf_and_analog</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/interfaces/sensors</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/board_types</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/speeds_and_signal_integrity</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/design_tools</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/validation_and_test</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/manufacturing_and_lifecycle</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/hardware/eda_tooling_built</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/embedded_and_firmware</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/embedded_and_firmware/microcontrollers</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/embedded_and_firmware/runtimes</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/embedded_and_firmware/practice</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/software</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/software/languages</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/software/backend_and_services</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/software/frontend</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/software/data_and_ml</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/software/ci_deployment_and_ops</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/software/llm_engineering</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/trading_systems_and_risk</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/trading_systems_and_risk/execution</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/trading_systems_and_risk/risk_controls</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/trading_systems_and_risk/research_method</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://matthewguo.me/p/leadership_and_programs</loc><lastmod>2026-10-25</lastmod></url>
 </urlset>
