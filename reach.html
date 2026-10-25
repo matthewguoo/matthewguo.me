@@ -10,20 +10,21 @@
   .mode { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--line-soft); }
   .mode button { padding:11px 0; font-size:13px; border-right:1px solid var(--line-soft); }
   .mode button:last-child { border-right:0; }
-  .mode button.on { background:var(--surface-soft); }
+  .box .mode button.on { background:var(--surface-soft); color:var(--ink); font-weight:600; }
   .row { display:grid; grid-template-columns:92px 1fr; border-bottom:1px solid var(--line-soft); }
   .row label { padding:11px 14px; border-right:1px solid var(--line-soft); align-self:start; }
   .row input, .row textarea, .row select { font:inherit; font-size:14px; color:var(--ink); border:0; outline:0; background:transparent; padding:10px 14px; width:100%; resize:vertical; }
   .row textarea { min-height:120px; }
   .row input:focus, .row textarea:focus { background:var(--surface-soft); }
-  .slots { padding:10px 14px; display:grid; gap:8px; }
-  .day { font-family:var(--font-display); font-size:12px; color:var(--muted-1); margin:4px 0 2px; }
+  .slots { padding:12px 14px; display:grid; gap:10px; }
+  .day { font-family:var(--font-display); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-3); margin:0 0 5px; }
   .times { display:flex; flex-wrap:wrap; gap:6px; }
-  .t { font-family:var(--mono); font-size:12px; border:1px solid var(--line); padding:4px 8px; background:var(--surface); }
-  .t:hover { border-color:var(--sakura); }
-  .t.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .box .t { font-family:var(--mono); font-size:12px; border:1px solid var(--line); padding:5px 9px; background:var(--surface); color:var(--ink); line-height:1.2; }
+  .box .t:hover { border-color:var(--sakura); color:var(--sakura); background:var(--surface); }
+  .box .t.on, .box .t.on:hover { background:var(--ink); color:#fff; border-color:var(--ink); }
   .len { display:flex; gap:0; }
-  .len button { padding:10px 14px; font-size:13px; border-right:1px solid var(--line-soft); }
+  .box .len button { padding:10px 14px; font-size:13px; border-right:1px solid var(--line-soft); color:var(--muted-1); }
+  .box .len button.on { color:var(--ink); background:var(--surface-soft); font-weight:600; }
   .act { display:grid; grid-template-columns:1fr 128px; align-items:stretch; }
   .act span { padding:11px 14px; font-size:13px; color:var(--muted-3); }
   .act span.err { color:var(--sakura); }
