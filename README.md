@@ -7,3 +7,5 @@ Personal site. `index.html` is the page; `api/mcp.js` is a small MCP server (Str
 - `contact`: writes a JSON record to the private Vercel Blob store `matthewguo-inbox` under `inbox/`. Read them with `vercel blob list` or the Vercel dashboard. If `RESEND_API_KEY` and `CONTACT_EMAIL` are set, each message is also emailed.
 
 Deployed on Vercel from this repo.
+
+- `profile.md` is generated from `profile.json` by `build_profile_md.py`; rerun it after editing the profile.
