@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Matthew Guo</title>
-<meta name="description" content="Matthew Guo. Chief Investment Officer at Vosburg Capital. Carnegie Mellon University.">
+<meta name="description" content="Matthew Guo. Investor and hardware and systems engineer. Chief Investment Officer at Vosburg Capital. Carnegie Mellon. Mountain View.">
 <link rel="canonical" href="https://matthewguo.me/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="profile">
@@ -26,6 +26,8 @@
   "jobTitle": "Chief Investment Officer",
   "worksFor": { "@type": "Organization", "name": "Vosburg Capital", "url": "https://vosburgcapital.com/" },
   "alumniOf": { "@type": "CollegeOrUniversity", "name": "Carnegie Mellon University" },
+  "description": "Investor and hardware and systems engineer.",
+  "address": { "@type": "PostalAddress", "addressLocality": "Mountain View", "addressRegion": "CA", "addressCountry": "US" },
   "sameAs": [
     "https://github.com/matthewguoo",
     "https://www.linkedin.com/in/matthewguoo/"
@@ -47,13 +49,16 @@
   .sketch img { display:block; width:100%; height:auto; }
   @media (max-width:720px) { .sketch { width:130vw; right:-30vw; bottom:5vh; opacity:.07; } }
   .page { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 28px; min-height:100dvh; display:flex; flex-direction:column; }
-  header { display:flex; align-items:baseline; justify-content:space-between; padding:22px 0; border-bottom:1px solid var(--line-soft); font-family:var(--font-display); font-size:13px; }
-  header .name { font-weight:600; color:var(--ink); }
+  header { display:flex; justify-content:flex-end; padding:22px 0; border-bottom:1px solid var(--line-soft); font-family:var(--font-display); font-size:13px; }
   header nav { display:flex; gap:20px; }
   a { color:var(--muted-1); text-decoration:none; }
   a:hover { color:var(--sakura); }
   main { flex:1; display:flex; flex-direction:column; justify-content:center; padding:60px 0; }
-  h1 { font-family:var(--font-display); font-size:clamp(32px, 5vw, 56px); font-weight:600; letter-spacing:-0.025em; line-height:1.05; margin:0; }
+  h1 { font-family:var(--font-display); font-size:clamp(32px, 5vw, 56px); font-weight:600; letter-spacing:-0.025em; line-height:1.05; margin:0 0 16px; }
+  .meta { margin:0; color:var(--muted-1); font-size:14px; display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center; }
+  .meta .dot { color:var(--muted-3); }
+  .meta .pin { display:inline-flex; align-items:center; gap:4px; }
+  .meta svg { width:13px; height:13px; fill:none; stroke:var(--sakura); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
   footer { padding:18px 0 24px; border-top:1px solid var(--line-soft); font-size:12px; color:var(--muted-3); }
 </style>
 </head>
@@ -61,7 +66,6 @@
 <div class="sketch" aria-hidden="true"><img src="/assets/sketch.webp" alt="" width="1200" height="800" decoding="async"></div>
 <div class="page">
   <header>
-    <a class="name" href="/">Matthew Guo</a>
     <nav>
       <a href="https://github.com/matthewguoo" rel="me noopener">GitHub</a>
       <a href="https://www.linkedin.com/in/matthewguoo/" rel="me noopener">LinkedIn</a>
@@ -69,6 +73,12 @@
   </header>
   <main>
     <h1>Matthew Guo</h1>
+    <p class="meta">
+      <span>Investor</span><span class="dot">·</span>
+      <span>Hardware and systems engineer</span><span class="dot">·</span>
+      <span>Carnegie Mellon</span><span class="dot">·</span>
+      <span class="pin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.4-6-10a6 6 0 0 1 12 0c0 4.6-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>Mountain View</span>
+    </p>
   </main>
   <footer>© 2026 Matthew Guo</footer>
 </div>
