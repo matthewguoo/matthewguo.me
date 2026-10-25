@@ -19,13 +19,18 @@
   .q input { flex:1; font:inherit; font-size:14px; border:0; outline:0; padding:9px 12px; background:transparent; color:var(--ink); }
   .q button { font:inherit; font-family:var(--font-display); font-size:12.5px; color:var(--muted-1); background:transparent; border:0; border-left:1px solid var(--line-soft); padding:0 12px; cursor:pointer; }
   .q button:hover { color:var(--sakura); }
-  .hits { margin-top:18px; }
-  .hit-group { margin:0 0 16px; }
-  .hit-group h4 { font-family:var(--font-display); font-size:12.5px; font-weight:600; margin:0 0 4px; color:var(--ink-2); }
-  .hit-group ul { margin:0; padding-left:18px; color:var(--ink-2); }
-  .hit-group li { margin:3px 0; }
-  mark { background:#8e213022; color:inherit; padding:0 1px; }
-  .none { color:var(--muted-3); font-size:14px; }
+  .hits { margin-top:18px; display:grid; grid-template-columns:repeat(auto-fill, minmax(330px, 1fr)); gap:10px; }
+  .hit-group { border:1px solid var(--line-soft); background:var(--surface); padding:12px 14px; font-size:13.5px; line-height:1.5; }
+  .hit-group .hp { font-family:var(--font-display); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-3); margin:0 0 8px; }
+  .hit-group .hp i { font-style:normal; color:var(--line); margin:0 4px; }
+  .hit-group ul { margin:0; padding:0; list-style:none; color:var(--ink-2); }
+  .hit-group li { margin:0 0 6px; padding-left:12px; position:relative; }
+  .hit-group li::before { content:""; position:absolute; left:0; top:.62em; width:4px; height:4px; background:var(--sakura); border-radius:50%; }
+  .hit-group li.more { padding:0; } .hit-group li.more::before { display:none; }
+  .morebtn { font:inherit; font-family:var(--font-display); font-size:12px; color:var(--muted-1); background:none; border:0; padding:0; cursor:pointer; border-bottom:1px solid var(--line); }
+  .morebtn:hover { color:var(--sakura); }
+  mark { background:none; color:var(--sakura); font-weight:500; }
+  .none { color:var(--muted-3); font-size:14px; grid-column:1 / -1; }
   /* timeline */
   .tl { position:relative; margin:0; padding:0 0 0 24px; list-style:none; border-left:1px solid var(--line); }
   .tl li { position:relative; padding:0 0 26px; }
@@ -94,35 +99,39 @@
 </div>
 <script>
 (function(){
+  // Keywords with an uppercase letter match case-sensitively (acronyms); others case-insensitively. All match on word boundaries.
   var TAGS=[
-    ['PCIe & high-speed',['pcie','thunderbolt','usb3','usb 3','10g','sfp','gmsl','mipi','signal integrity','impedance','crosstalk','length']],
-    ['FPGA',['fpga','kintex','gtx','lvcmos']],
-    ['SoC & carriers',['soc','carrier','cm4','cm5','orin','rk3588','panther','lpddr','ddr','chip-down','interposer']],
-    ['Flex & HDI',['flex','hdi','via-in-pad','bga','coverlay']],
-    ['Power',['power','pmic','nvdc','buck','boost','usb-c','supercap','ups','ldo','wireless']],
-    ['Sensors & cameras',['camera','lidar','sensor','imu','encoder','optical','load-cell']],
-    ['Firmware',['firmware','stm32','bare-metal','rtos','bootloader','c++','samd','rp2350','atmel']],
-    ['Embedded Linux',['yocto','linux','provisioning','fleet','flashing']],
-    ['Manufacturing',['dfm','ems','jlc','bom','fab','manufactur','ipc','halt','mtbf','assembly','cost']],
-    ['EDA tooling',['kicad','router','placer','eda','toolchain','workbench']],
-    ['Autonomy & robotics',['drone','robot','autonom','fanuc','abb','l4','perception','truss']],
-    ['Industrial I/O',['can','io-link','rs-422','rs-485','24 v','24v','din','m12','quadrature','solenoid','stepper']],
-    ['Trading systems',['trading','broker','execution','alpaca','interactive brokers','order','market data','p&l']],
-    ['Risk',['risk','drawdown','kill','halt','dead-man','reconcil','loss','exposure']],
-    ['Quant research',['research','pre-regist','backtest','lightgbm','parquet','edgar','holdout','placebo']],
-    ['Backend & infra',['fastapi','postgres','redis','systemd','docker','ci','deploy','mypy','pytest','vercel','next.js']],
-    ['LLM & agents',['llm','mcp','anthropic','model','agent','prompt','qwen']],
-    ['Leadership',['founded','manage','client','vendor','program','contractor','quote','firm']]
+    ['PCIe & high-speed',['PCIe','Thunderbolt','USB3','USB 3','USB4','10GBASE','10 Gbps','SFP','GMSL','MIPI','signal integrity','SI','impedance','crosstalk','length match','skew','differential']],
+    ['FPGA',['FPGA','Kintex','GTX','LVCMOS','transceiver']],
+    ['SoC & carriers',['SoC','carrier','CM4','CM5','Orin','RK3588','Panther Lake','LPDDR5X','DDR5','DDR3','chip-down','interposer','mainboard','motherboard']],
+    ['Flex & HDI',['flex','HDI','via-in-pad','BGA','coverlay','stiffener','polyimide']],
+    ['Power',['power','PMIC','NVDC','buck','boost','USB-C','supercap','UPS','LDO','wireless power','inductive','PD','hot-swap']],
+    ['Sensors & cameras',['camera','lidar','sensor','IMU','encoder','optical','load-cell','RealSense','time-of-flight']],
+    ['Firmware',['firmware','STM32','bare-metal','RTOS','bootloader','C++','SAMD21','RP2350','ATtiny','Cortex-M','register-level']],
+    ['Embedded Linux',['Yocto','Linux','provisioning','fleet','flashing','device driver']],
+    ['Manufacturing',['DFM','DFA','EMS','JLC','LCSC','BOM','fabrication','fab-ready','manufactur','IPC Class 3','HALT','HASS','MTBF','assembly','unit cost','USD','batches','supplier']],
+    ['EDA tooling',['KiCad','router','placer','EDA','toolchain','workbench','escape','fan-out','kicad-cli','Altium']],
+    ['Autonomy & robotics',['drone','robot','autonomous','autonomy','FANUC','ABB','L4','perception','truss','end effector']],
+    ['Industrial I/O',['CAN','IO-Link','RS-422','RS-485','24 V','24V','DIN','M12','M8','quadrature','solenoid','stepper','open-collector','isolation','isolated']],
+    ['Trading systems',['trading','broker','execution','Alpaca','Interactive Brokers','order','market data','P&L','fair value','exits']],
+    ['Risk',['risk','drawdown','kill','halt','dead-man','reconcil','max loss','exposure','catastrophe','fail-closed']],
+    ['Quant research',['research','pre-regist','backtest','LightGBM','parquet','EDGAR','holdout','placebo','Newey','studies']],
+    ['Backend & infra',['FastAPI','Postgres','Redis','systemd','Docker','CI','deploy','mypy','pytest','hypothesis','Vercel','Next.js','Prisma','Stripe','TypeScript','React']],
+    ['LLM & agents',['LLM','MCP','Anthropic','Claude','language model','agent','prompt','Qwen','llama']],
+    ['Leadership',['founded','manage','client','vendor','program','contractor','quote','firm','stakeholder','scoping']]
   ];
-  var P, on={}, free='';
+  var P, on={}, free='', MAX=4;
   var $=function(id){return document.getElementById(id)};
-  var esc=function(s){return String(s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})};
+  var esc=function(x){return String(x).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})};
   var title=function(k){return k.replace(/_/g,' ')};
-  function keys(){ var k=[]; Object.keys(on).forEach(function(i){ if(on[i]) k=k.concat(TAGS[i][1]); }); if(free.length>1) k.push(free.toLowerCase()); return k; }
-  function matches(text,ks){ var t=text.toLowerCase(); return ks.some(function(k){return t.indexOf(k)>=0}); }
-  function hl(text,ks){ var out=esc(text); ks.forEach(function(k){ var re=new RegExp('('+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'); out=out.replace(re,'<mark></mark>'); }); return out; }
+  var rx=function(k){ var e=k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); var cs=/[A-Z]/.test(k); return new RegExp('(^|[^A-Za-z0-9])('+e+')(?=[^A-Za-z0-9]|$)', cs?'g':'gi'); };
+  function keys(){ var k=[]; Object.keys(on).forEach(function(i){ if(on[i]) k=k.concat(TAGS[i][1]); }); if(free.length>1) k.push(free); return k; }
+  function ranges(text,ks){ var out=[]; ks.forEach(function(k){ var r=rx(k), m; while((m=r.exec(text))){ var st=m.index+m[1].length; out.push([st,st+m[2].length]); if(m[0].length===0) r.lastIndex++; } }); out.sort(function(a,b){return a[0]-b[0]}); var merged=[]; out.forEach(function(r){ var l=merged[merged.length-1]; if(l&&r[0]<=l[1]) l[1]=Math.max(l[1],r[1]); else merged.push(r.slice()); }); return merged; }
+  function matches(text,ks){ return ranges(text,ks).length>0; }
+  function hl(text,ks){ var rs=ranges(text,ks), o='', i=0; rs.forEach(function(r){ o+=esc(text.slice(i,r[0]))+'<mark>'+esc(text.slice(r[0],r[1]))+'</mark>'; i=r[1]; }); return o+esc(text.slice(i)); }
   function walk(tree,prefix,fn){ Object.keys(tree).forEach(function(k){ var v=tree[k], p=prefix?prefix+'.'+k:k; fn(p,v); if(v.children) walk(v.children,p,fn); }); }
-  function countFor(ks){ var n=0; walk(P.capabilities,'',function(p,v){ (v.items||[]).forEach(function(i){ if(matches(i,ks)) n++; }); }); P.projects.forEach(function(x){ if(matches(JSON.stringify(x),ks)) n++; }); P.experience.forEach(function(e){ e.highlights.forEach(function(h){ if(matches(h,ks)) n++; }); }); return n; }
+  function countFor(ks){ var n=0; walk(P.capabilities,'',function(p,v){ (v.items||[]).forEach(function(i){ if(matches(i,ks)) n++; }); }); P.projects.forEach(function(x){ if(matches(x.name+' '+x.what,ks)) n++; }); P.experience.forEach(function(e){ e.highlights.forEach(function(h){ if(matches(h,ks)) n++; }); }); return n; }
+  function list(items,ks){ var shown=items.slice(0,MAX), rest=items.length-shown.length; return '<ul>'+shown.map(function(i){return '<li>'+hl(i,ks)+'</li>'}).join('')+(rest>0?'<li class="more"><button type="button" class="morebtn">+'+rest+' more</button><span hidden>'+items.slice(MAX).map(function(i){return '<li>'+hl(i,ks)+'</li>'}).join('')+'</span></li>':'')+'</ul>'; }
   function render(){
     var ks=keys(), active=ks.length>0;
     document.body.classList.toggle('filtering',active);
@@ -131,21 +140,21 @@
     if(active){
       var groups=[];
       walk(P.capabilities,'',function(p,v){ var hits=(v.items||[]).filter(function(i){return matches(i,ks)}); if(hits.length) groups.push({p:p,hits:hits}); });
-      groups.forEach(function(g){ h+='<div class="hit-group"><h4>'+esc(g.p.split('.').map(title).join(' / '))+'</h4><ul>'+g.hits.map(function(i){return '<li>'+hl(i,ks)+'</li>'}).join('')+'</ul></div>'; });
-      var pr=P.projects.filter(function(x){return matches(JSON.stringify(x),ks)});
-      if(pr.length) h+='<div class="hit-group"><h4>Projects</h4><ul>'+pr.map(function(x){return '<li><b>'+esc(x.name)+'</b>: '+hl(x.what,ks)+'</li>'}).join('')+'</ul></div>';
-      var ex=[]; P.experience.forEach(function(e){ e.highlights.forEach(function(x){ if(matches(x,ks)) ex.push(e.title+', '+e.org+': '+x); }); });
-      if(ex.length) h+='<div class="hit-group"><h4>Experience</h4><ul>'+ex.map(function(x){return '<li>'+hl(x,ks)+'</li>'}).join('')+'</ul></div>';
-      if(!h) h='<p class="none">Nothing matches that yet. Ask him: it may just not be written down.</p>';
+      groups.forEach(function(g){ h+='<div class="hit-group"><div class="hp">'+g.p.split('.').map(title).join(' <i>/</i> ')+'</div>'+list(g.hits,ks)+'</div>'; });
+      var pr=P.projects.filter(function(x){return matches(x.name+' '+x.what,ks)});
+      if(pr.length) h+='<div class="hit-group"><div class="hp">projects</div>'+list(pr.map(function(x){return x.name+': '+x.what}),ks)+'</div>';
+      var ex=[]; P.experience.forEach(function(e){ e.highlights.forEach(function(x){ if(matches(x,ks)) ex.push(e.org+': '+x); }); });
+      if(ex.length) h+='<div class="hit-group"><div class="hp">experience</div>'+list(ex,ks)+'</div>';
+      if(!h) h='<p class="none">Nothing written down matches that. Ask him.</p>';
     }
     $('hits').innerHTML=h;
     document.querySelectorAll('.tl li li').forEach(function(li){ li.classList.toggle('match',active&&matches(li.textContent,ks)); });
-    document.querySelectorAll('.projects li').forEach(function(li){ li.classList.toggle('match',active&&matches(li.textContent,ks)); });
+    document.querySelectorAll('.projects > li').forEach(function(li){ li.classList.toggle('match',active&&matches(li.textContent,ks)); });
     document.querySelectorAll('.chip').forEach(function(c,i){ c.classList.toggle('on',!!on[i]); });
   }
+  $('hits').addEventListener('click',function(e){ var b=e.target.closest('.morebtn'); if(!b) return; var li=b.parentNode; li.outerHTML=li.querySelector('span').innerHTML; });
   fetch('/profile.json').then(function(r){return r.json()}).then(function(p){
     P=p;
-    var cur=p.experience.filter(function(e){return !e.end}).map(function(e){return e.title+', '+e.org});
     $('meta').innerHTML='<span>'+esc(p.headline)+'</span><span class="dot">·</span><span>'+esc(p.languages_spoken.join(', '))+'</span>';
     $('summary').textContent=p.summary;
     $('chips').innerHTML=TAGS.map(function(t,i){ return '<button type="button" class="chip" data-i="'+i+'">'+esc(t[0])+'<small>'+countFor(t[1])+'</small></button>'; }).join('');
