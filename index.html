@@ -61,9 +61,10 @@
   .meta .pin { display:inline-flex; align-items:center; gap:4px; }
   .meta svg { width:13px; height:13px; fill:none; stroke:var(--sakura); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
   .mcp { margin:22px 0 0; border:1px solid var(--line); background:var(--surface); font-family:var(--mono); font-size:13px; }
-  .mcp div { padding:10px 14px; display:flex; justify-content:space-between; gap:12px; align-items:baseline; }
+  .mcp div { padding:10px 14px; display:grid; grid-template-columns:92px 1fr; gap:12px; align-items:baseline; }
   .mcp div + div { border-top:1px solid var(--line-soft); }
   .mcp .k { font-family:var(--font-display); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-3); white-space:nowrap; }
+  @media (max-width:480px) { .mcp div { grid-template-columns:1fr; gap:4px; } }
   .mcp code { color:var(--ink); word-break:break-all; }
   .fine { font-size:13px; color:var(--muted-3); margin-top:14px; }
   footer { padding:18px 0 24px; border-top:1px solid var(--line-soft); font-size:12px; color:var(--muted-3); }
