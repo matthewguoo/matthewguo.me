@@ -31,5 +31,11 @@
       "destination": "https://matthewguo.me/$1",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/mcp",
+      "destination": "/api/mcp"
+    }
   ]
 }

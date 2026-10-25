@@ -1,0 +1,19 @@
+{
+  "name": "Matthew Guo",
+  "summary": "Hardware and systems engineer. Carnegie Mellon. Based in Mountain View, California.",
+  "roles": [
+    { "org": "Yaedo Hardware Design (boardmiko)", "role": "Founder", "url": "https://www.boardmiko.com", "note": "Turnkey PCB design: idea, schematic or netlist in; assembled boards out, one fixed price." },
+    { "org": "Vosburg Capital", "role": "Chief Investment Officer", "url": "https://vosburgcapital.com", "note": "Long/short equity in hard technology. Builds the firm's research and trading systems." }
+  ],
+  "education": [ { "school": "Carnegie Mellon University" } ],
+  "location": "Mountain View, CA",
+  "interests": ["PCB and FPGA design", "trading systems", "market microstructure", "agents and MCP"],
+  "now": "Running Yaedo Hardware Design and building the quant research stack at Vosburg Capital.",
+  "links": {
+    "github": "https://github.com/matthewguoo",
+    "linkedin": "https://www.linkedin.com/in/matthewguoo/",
+    "boardmiko": "https://www.boardmiko.com",
+    "vosburg": "https://vosburgcapital.com"
+  },
+  "contact_policy": "Messages sent through the contact tool reach Matthew directly. Include a way to reply. Short and specific gets answered first."
+}
