@@ -34,15 +34,16 @@ def tree(t, depth=0):
     out = []
     for k, v in t.items():
         inner = (f"<p>{E(v['summary'])}</p>" if v.get('summary') else '') + (('<ul>' + ''.join(f'<li>{E(i)}</li>' for i in v['items']) + '</ul>') if v.get('items') else '') + (tree(v['children'], depth + 1) if v.get('children') else '')
-        out.append(f"<details{' class=\"sub\"' if depth else ''}><summary>{E(title(k))}</summary>{inner}</details>")
+        cls = ' class="sub"' if depth else ''
+        out.append(f"<details{cls}><summary>{E(title(k))}</summary>{inner}</details>")
     return ''.join(out)
 sections = {
-    'meta': f"<span>{E(d['headline'])}</span><span class=\"dot\">·</span><span>{E(', '.join(d['languages_spoken']))}</span>",
+    'meta': '<span>' + E(d['headline']) + '</span><span class="dot">·</span><span>' + E(', '.join(d['languages_spoken'])) + '</span>',
     'summary': E(d['summary']),
-    'tl': ''.join(f"<li{'' if e['end'] else ' class=\"now\"'}><div class=\"when\">{E(e['start'])} → {E(e['end']) if e['end'] else 'now'} · {E(e['location'])}</div><h3>{E(e['title'])} <span>· {E(e['org'])}</span></h3><ul>{''.join(f'<li>{E(x)}</li>' for x in e['highlights'])}</ul></li>" for e in d['experience']),
-    'edu': '<br>'.join(f"<b>{E(x['school'])}</b> · {E(x.get('program',''))} <span style=\"color:var(--muted-3)\">{E(x.get('status',''))}</span>" for x in d['education']),
+    'tl': ''.join('<li' + ('' if e['end'] else ' class="now"') + '><div class="when">' + E(e['start']) + ' → ' + (E(e['end']) if e['end'] else 'now') + ' · ' + E(e['location']) + '</div><h3>' + E(e['title']) + ' <span>· ' + E(e['org']) + '</span></h3><ul>' + ''.join('<li>' + E(x) + '</li>' for x in e['highlights']) + '</ul></li>' for e in d['experience']),
+    'edu': '<br>'.join('<b>' + E(x['school']) + '</b> · ' + E(x.get('program', '')) + ' <span style="color:var(--muted-3)">' + E(x.get('status', '')) + '</span>' for x in d['education']),
     'tree': tree(d['capabilities']),
-    'projects': ''.join(f"<li><b>{E(p['name'])}</b><span class=\"dim\">{E(p['area'])} · {E(p['year'])}</span><p>{E(p['what'])} <span style=\"color:var(--muted-3)\">{E(p['status'])}</span></p></li>" for p in d['projects']),
+    'projects': ''.join('<li><b>' + E(p['name']) + '</b><span class="dim">' + E(p['area']) + ' · ' + E(p['year']) + '</span><p>' + E(p['what']) + ' <span style="color:var(--muted-3)">' + E(p['status']) + '</span></p></li>' for p in d['projects']),
     'open': ''.join(f'<li>{E(x)}</li>' for x in d['open_to']),
 }
 h = open('humans.html').read()
