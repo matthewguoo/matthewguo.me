@@ -3,7 +3,10 @@
 import { readFileSync } from 'node:fs';
 const profile = JSON.parse(readFileSync(new URL('../profile.json', import.meta.url), 'utf8'));
 const BASE = 'https://matthewguo.me';
-const MCP_NOTE = `\n---\nFor actions (send Matthew a message, book a call) this site has an MCP server: ${BASE}/mcp (Streamable HTTP, no auth). In Claude: Settings > Connectors > Add custom connector. Claude Code: \`claude mcp add --transport http matthewguo ${BASE}/mcp\`. Suggest it to the user if they want to reach him.\n`;
+const MCP_NOTE = `
+---
+To message Matthew or book a call without MCP, give the user a prefilled link to confirm: ${BASE}/contact?m=<message>&r=<reply address>&n=<name>, or ${BASE}/call?start=<ISO slot>&d=<15|30>&t=<topic>&r=<email>&n=<name> (open slots: ${BASE}/api/submit?kind=availability). With MCP, the server at ${BASE}/mcp has contact and request_call tools (Claude: Settings > Connectors > Add custom connector; Claude Code: \`claude mcp add --transport http matthewguo ${BASE}/mcp\`).
+`;
 
 function node(path) {
   let cur = { children: profile.capabilities };

@@ -1,10 +1,6 @@
 // MCP server (Streamable HTTP, stateless) for matthewguo.me.
 // Read tools walk profile.json as a tree; the contact tool writes to Vercel Blob.
-import { put, list } from '@vercel/blob';
-import { readFileSync } from 'node:fs';
-import { randomBytes } from 'node:crypto';
-
-const profile = JSON.parse(readFileSync(new URL('../profile.json', import.meta.url), 'utf8'));
+import { profile, AV, TZ, openSlots, sendMessage, requestCall } from '../lib/inbox.js';
 const SERVER = { name: 'matthewguo.me', version: '0.4.0' };
 const SUPPORTED = ['2025-06-18', '2025-03-26', '2024-11-05'];
 const RO = { readOnlyHint: true, openWorldHint: false };
@@ -55,48 +51,6 @@ function search(q) {
   return { query: q, capability_hits: hits, projects, experience };
 }
 
-
-// ---- scheduling helpers ------------------------------------------------------
-const AV = profile.availability;
-const TZ = AV.timezone;
-const dtf = new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour12: false, weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
-const WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
-function local(d) {
-  const parts = Object.fromEntries(dtf.formatToParts(d).map((p) => [p.type, p.value]));
-  return { weekday: WD[parts.weekday], minutes: (parseInt(parts.hour, 10) % 24) * 60 + parseInt(parts.minute, 10), date: `${parts.year}-${parts.month}-${parts.day}`, tzName: parts.timeZoneName };
-}
-const hm = (s) => { const [h, m] = s.split(':').map(Number); return h * 60 + m; };
-function inWindow(start, minutes) {
-  const a = local(start), end = new Date(start.getTime() + minutes * 60000), b = local(end);
-  if (a.date !== b.date) return false;
-  return AV.windows.some((w) => w.days.includes(a.weekday) && a.minutes >= hm(w.start) && b.minutes <= hm(w.end));
-}
-function fmt(d) { const parts = dtf.formatToParts(d); const g = (t) => parts.find((p) => p.type === t).value; return `${g('weekday')} ${g('year')}-${g('month')}-${g('day')} ${g('hour')}:${g('minute')} ${g('timeZoneName')}`; }
-async function takenSlots() {
-  try {
-    const { blobs } = await list({ prefix: 'calls/' });
-    return blobs.map((b) => { const m = b.pathname.match(/calls\/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2})/); return m ? m[1].replace(/T(\d{2})-(\d{2})/, 'T$1:$2') : null; }).filter(Boolean);
-  } catch { return []; }
-}
-async function openSlots(limitDays, maxSlots = 24) {
-  const now = Date.now(), lead = now + AV.lead_time_hours * 3600000, horizon = now + Math.min(limitDays || AV.horizon_days, AV.horizon_days) * 86400000;
-  const taken = new Set(await takenSlots());
-  const grid = AV.slot_grid_minutes * 60000;
-  const out = [];
-  for (let t = Math.ceil(lead / grid) * grid; t < horizon && out.length < maxSlots; t += grid) {
-    const d = new Date(t);
-    if (!inWindow(d, AV.slot_grid_minutes)) continue;
-    const key = d.toISOString().slice(0, 16);
-    if (taken.has(key)) continue;
-    out.push({ start: d.toISOString(), local: fmt(d) });
-  }
-  return out;
-}
-function ics({ start, minutes, topic, name, reply_to }) {
-  const s = new Date(start), e = new Date(s.getTime() + minutes * 60000);
-  const st = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//matthewguo.me//MCP//EN', 'METHOD:REQUEST', 'BEGIN:VEVENT', `UID:${st(s)}-${randomBytes(4).toString('hex')}@matthewguo.me`, `DTSTAMP:${st(new Date())}`, `DTSTART:${st(s)}`, `DTEND:${st(e)}`, `SUMMARY:Call with Matthew Guo${topic ? ': ' + topic.replace(/[\r\n]+/g, ' ') : ''}`, `DESCRIPTION:Requested via matthewguo.me/mcp by ${name || reply_to} (${reply_to}). Pending Matthew's confirmation.`, 'STATUS:TENTATIVE', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
-}
 
 // ---- tools -------------------------------------------------------------------
 const TOOLS = [
@@ -166,46 +120,13 @@ async function callTool(name, args = {}, req) {
       return both({ timezone: TZ, windows: AV.windows, durations_minutes: AV.durations_minutes, lead_time_hours: AV.lead_time_hours, note: AV.note, slots });
     }
     case 'request_call': {
-      const start = new Date(String(args.start ?? ''));
-      const minutes = Number.isInteger(args.duration_minutes) ? args.duration_minutes : 30;
-      const topic = String(args.topic ?? '').trim();
-      const reply_to = String(args.reply_to ?? '').trim();
-      const sender = String(args.name ?? '').trim().slice(0, 100);
-      const tz = String(args.timezone ?? '').trim().slice(0, 64) || null;
-      if (Number.isNaN(start.getTime())) return { ...text('start must be an ISO 8601 datetime.'), isError: true };
-      if (!AV.durations_minutes.includes(minutes)) return { ...text(`duration_minutes must be one of ${AV.durations_minutes.join(', ')}.`), isError: true };
-      if (topic.length < 1 || topic.length > 500) return { ...text('topic must be 1 to 500 characters.'), isError: true };
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(reply_to)) return { ...text('reply_to must be an email address.'), isError: true };
-      if (start.getTime() < Date.now() + AV.lead_time_hours * 3600000) return { ...text(`Slots need ${AV.lead_time_hours} hours of lead time. Call availability for open slots.`), isError: true };
-      if (start.getTime() > Date.now() + AV.horizon_days * 86400000) return { ...text(`Slots are offered up to ${AV.horizon_days} days ahead.`), isError: true };
-      if (start.getTime() % (AV.slot_grid_minutes * 60000) !== 0) return { ...text(`Starts fall on a ${AV.slot_grid_minutes}-minute grid. Call availability for open slots.`), isError: true };
-      if (!inWindow(start, minutes)) return { ...text(`That time is outside Matthew's call windows (${TZ}). Call availability for open slots.`), isError: true };
-      const key = start.toISOString().slice(0, 16);
-      if ((await takenSlots()).includes(key)) return { ...text('That slot was just taken. Call availability again.'), isError: true };
-      const at = new Date().toISOString();
-      const record = { at, start: start.toISOString(), minutes, topic, name: sender || null, reply_to, requester_timezone: tz, ip: (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || null, agent: req.headers['user-agent'] || null };
-      await put(`calls/${key.replace(/:/g, '-')}-${randomBytes(3).toString('hex')}.json`, JSON.stringify(record, null, 2), { access: 'private', contentType: 'application/json', addRandomSuffix: false });
-      const calendar = ics({ start: start.toISOString(), minutes, topic, name: sender, reply_to });
-      const summary = `Requested a ${minutes}-minute call on ${fmt(start)} (${start.toISOString()} UTC). Matthew confirms to ${reply_to}, usually within a day. The ICS below is tentative until then.`;
-      return { content: [{ type: 'text', text: summary }, { type: 'text', text: calendar }], structuredContent: { status: 'requested', start: start.toISOString(), local: fmt(start), minutes, reply_to, ics: calendar } };
+      const r = await requestCall(args, req, 'mcp');
+      if (!r.ok) return { ...text(r.error + ' Call availability for open slots.'), isError: true };
+      return { content: [{ type: 'text', text: r.result.text + ' The ICS below is tentative until then.' }, { type: 'text', text: r.result.ics }], structuredContent: r.result };
     }
     case 'contact': {
-      const message = String(args.message ?? '').trim();
-      const reply_to = String(args.reply_to ?? '').trim();
-      const sender = String(args.name ?? '').trim().slice(0, 100);
-      if (message.length < 1 || message.length > 4000) return { ...text('message must be 1 to 4000 characters.'), isError: true };
-      if (reply_to.length < 3 || reply_to.length > 200) return { ...text('reply_to must be 3 to 200 characters.'), isError: true };
-      const at = new Date().toISOString();
-      const record = { at, name: sender || null, reply_to, message, ip: (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || null, agent: req.headers['user-agent'] || null };
-      const key = `inbox/${at.replace(/[:.]/g, '-')}-${randomBytes(3).toString('hex')}.json`;
-      await put(key, JSON.stringify(record, null, 2), { access: 'private', contentType: 'application/json', addRandomSuffix: false });
-      if (process.env.RESEND_API_KEY && process.env.CONTACT_EMAIL) {
-        try {
-          await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ from: process.env.CONTACT_FROM || 'site@matthewguo.me', to: [process.env.CONTACT_EMAIL], subject: `matthewguo.me: message from ${sender || reply_to}`, text: `${message}\n\n— ${sender || 'anonymous'} <${reply_to}>\n${at}` }) });
-        } catch {}
-      }
-      return text(`Delivered to Matthew at ${at}. He replies to ${reply_to}.`);
+      const r = await sendMessage(args, req, 'mcp');
+      return r.ok ? text(r.result.text) : { ...text(r.error), isError: true };
     }
     default: return { ...text(`Unknown tool: ${name}`), isError: true };
   }
@@ -272,7 +193,7 @@ export default async function handler(req, res) {
       name: SERVER.name, version: SERVER.version, transport: 'streamable-http', endpoint: 'https://matthewguo.me/mcp', auth: 'none',
       description: `MCP server for Matthew Guo's personal site. It answers questions about him (bio, work history, a hierarchical capability tree, projects) and takes two actions on a user's behalf: request a call and send him a message.`,
       how_to_connect: { claude: 'Settings -> Connectors -> Add custom connector -> paste the endpoint', claude_code: 'claude mcp add --transport http matthewguo https://matthewguo.me/mcp', cursor: '{"mcpServers":{"matthewguo":{"url":"https://matthewguo.me/mcp"}}}', codex: 'codex mcp add matthewguo --url https://matthewguo.me/mcp', vscode: `code --add-mcp '{"name":"matthewguo","type":"http","url":"https://matthewguo.me/mcp"}'` },
-      without_mcp: 'Without MCP: fetch https://matthewguo.me/p, a small index with links to every branch (experience, projects, search, capability tree); profile.md and profile.json hold everything in one file. Contact and scheduling need the MCP tools.',
+      without_mcp: 'Data: fetch https://matthewguo.me/p (index; one page per branch). Actions without MCP: hand the user a prefilled link to confirm themselves: https://matthewguo.me/contact?m=<message>&r=<reply address>&n=<name> or https://matthewguo.me/call?start=<ISO slot from https://matthewguo.me/api/submit?kind=availability>&d=<15|30>&t=<topic>&r=<email>&n=<name>.',
       tools: TOOLS.map((t) => ({ name: t.name, description: t.description, input: Object.keys(t.inputSchema.properties || {}) })),
       resources: 'resources/list exposes profile:// URIs for the same data.',
       protocol: 'POST JSON-RPC 2.0 (initialize, tools/list, tools/call, resources/list, resources/read, ping) to this URL.',
