@@ -8,4 +8,4 @@ Personal site. `index.html` is the page; `api/mcp.js` is a small MCP server (Str
 
 Deployed on Vercel from this repo.
 
-- `profile.md` is generated from `profile.json` by `build_profile_md.py`; rerun it after editing the profile.
+- `build.py` regenerates `profile.md` and pre-renders the sections of `humans.html` from `profile.json`; run it after editing the profile.
