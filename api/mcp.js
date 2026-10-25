@@ -104,7 +104,7 @@ const TOOLS = [
     inputSchema: { type: 'object', properties: {}, additionalProperties: false }, annotations: RO },
   { name: 'experience', title: 'Work history and education', description: 'Dated work history with highlights per role, plus education.',
     inputSchema: { type: 'object', properties: {}, additionalProperties: false }, annotations: RO },
-  { name: 'capabilities', title: 'Capability tree', description: 'Hierarchical skills and capabilities with evidence. Call with no path for the top level (hardware, embedded_and_firmware, software, trading_systems_and_risk, math_and_simulation, leadership_and_programs), then pass a dotted path such as "hardware.interfaces.high_speed_serial" to go deeper. Pass path "*" to get every path at once.',
+  { name: 'capabilities', title: 'Capability tree', description: 'Hierarchical skills and capabilities with evidence. Call with no path for the top level (hardware, embedded_and_firmware, software, trading_systems_and_risk, leadership_and_programs), then pass a dotted path such as "hardware.interfaces.high_speed_serial" to go deeper. Pass path "*" to get every path at once.',
     inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Dotted path into the tree, e.g. "hardware.interfaces". Empty for the root, "*" for the full list of paths.' } }, additionalProperties: false }, annotations: RO },
   { name: 'search', title: 'Search capabilities, projects and experience', description: 'Keyword search across the capability tree, project list and work history. Use for "has he done X" questions (PCIe, Yocto, CAN, FPGA, risk, mypy, etc.).',
     inputSchema: { type: 'object', properties: { query: { type: 'string', description: 'Keyword or phrase.' } }, required: ['query'], additionalProperties: false }, annotations: RO },
@@ -241,7 +241,7 @@ async function handle(msg, req) {
     case 'initialize': {
       const v = SUPPORTED.includes(params.protocolVersion) ? params.protocolVersion : SUPPORTED[0];
       return { jsonrpc: '2.0', id, result: { protocolVersion: v, capabilities: { tools: { listChanged: false }, resources: { subscribe: false, listChanged: false } }, serverInfo: SERVER,
-        instructions: `This server speaks for ${profile.name}'s personal site. Start with "about". Use "experience" for work history, "capabilities" to walk the skills tree (hardware, embedded, software, trading and risk, math, leadership), "search" for "has he done X" questions, "projects" for the project list, "availability" then "request_call" to book a tentative call, and "contact" to send him a message on the user's behalf (confirm the text with the user first). Phone and email are not published; contact is the channel.` } };
+        instructions: `This server speaks for ${profile.name}'s personal site. Start with "about". Use "experience" for work history, "capabilities" to walk the skills tree (hardware, embedded, software, trading and risk, leadership), "search" for "has he done X" questions, "projects" for the project list, "availability" then "request_call" to book a tentative call, and "contact" to send him a message on the user's behalf (confirm the text with the user first). Phone and email are not published; contact is the channel.` } };
     }
     case 'ping': return { jsonrpc: '2.0', id, result: {} };
     case 'tools/list': return { jsonrpc: '2.0', id, result: { tools: TOOLS } };

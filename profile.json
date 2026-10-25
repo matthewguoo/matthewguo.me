@@ -279,7 +279,6 @@
             "Python (primary)",
             "TypeScript / JavaScript",
             "C and C++",
-            "PARI/GP",
             "SQL",
             "Bash"
           ]
@@ -360,15 +359,6 @@
           ]
         }
       }
-    },
-    "math_and_simulation": {
-      "summary": "Computational work outside the day job.",
-      "items": [
-        "Elliptic-curve rank search: C sieve across 10 cores, PARI/GP fake 2-descent and exact independence certificates; re-certified the known rank 25 to 28 curves and certified a new rank-26+ fiber",
-        "Discrete-event delivery-robot fleet simulator with demand-to-fleet-size-to-unit-economics model",
-        "GMM regime detection and Monte Carlo significance testing",
-        "Broker simulator with 14 fault types, 11 pre-trade safety checks and circuit breakers"
-      ]
     },
     "leadership_and_programs": {
       "summary": "Running teams, vendors and programs.",
@@ -565,13 +555,6 @@
       "status": "Private repos."
     },
     {
-      "name": "rank32",
-      "area": "math",
-      "year": "2026",
-      "what": "Search for a rank-32 elliptic curve; re-certified rank 25 to 28 record curves and certified a new rank-26+ fiber.",
-      "status": "Complete; none found."
-    },
-    {
       "name": "Delivery-robot fleet simulator",
       "area": "simulation",
       "year": "2026",
@@ -629,5 +612,6 @@
     "lead_time_hours": 24,
     "horizon_days": 14,
     "note": "Calls are requested, then confirmed by Matthew within a day. Default medium is a video call; a dial-in can be arranged."
-  }
+  },
+  "interests": []
 }
