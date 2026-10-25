@@ -54,7 +54,8 @@
         "Led all in-house PCB projects (10+ assemblies including IPC Class 3) and a custom NVIDIA Orin carrier that resolved sensor-bandwidth bottlenecks for on-robot AI processing.",
         "Integrated and debugged controls, power, CAN, wiring and industrial sensing (encoders, laser and optical, safety and specialty sensors) on FANUC and ABB truss-assembly lines; fault-tolerant control architecture and device-scale UPS modules cut controls-related downtime 10x.",
         "Deployed and managed a fleet of Yocto-based embedded Linux controllers with versioned provisioning, flashing and update workflows.",
-        "Cut subsystem BOM cost 20 percent and assembly time in half via custom modules and contract harness manufacturers; introduced phase-gating, DFM review and HALT/HASS validation."
+        "Cut subsystem BOM cost 20 percent and assembly time in half via custom modules and contract harness manufacturers; introduced phase-gating, DFM review and HALT/HASS validation.",
+        "Portfolio of disclosed Botbuilt boards (eleven, 2023 to 2025) is in the projects list: CM4 PCIe-to-USB3 breakout, 24 V output board, truss-arm controller and TMC262 driver modules, quadrature bridge, IoT storage controller, CM4 interposer with supercap hold-up, LED light ring, connection board, Input Table IO, Orin carrier."
       ]
     },
     {
@@ -100,7 +101,9 @@
                 "10GBASE-R over SFP+ (dual) on Kintex-7 GTX",
                 "Gigabit Ethernet",
                 "GMSL and other high-speed camera serial links",
-                "MIPI CSI-2 multi-camera"
+                "MIPI CSI-2 multi-camera",
+                "PCIe Gen3 switching and muxing: PCIe-to-USB3 bridges (uPD720201), PCIe muxes and clock buffers for dual M.2 slots",
+                "USB hubs (CYUSB3304), GbE switches (KSZ9893) and USB-GbE bridges (LAN7800)"
               ]
             },
             "memory": {
@@ -108,7 +111,8 @@
                 "LPDDR5X (Intel Panther Lake platform)",
                 "DDR5 chip-down (RK3588S compact board)",
                 "DDR3 (Kintex-7 capture board; in-house DDR3 plan/route/tune tooling)",
-                "QSPI flash, eMMC, microSD, M.2 NVMe"
+                "QSPI flash, eMMC, microSD, M.2 NVMe",
+                "Quad-SPI SD and octal-SPI eMMC behind a repurposed Ethernet mux for dual boot volumes"
               ]
             },
             "display_and_video": {
@@ -124,7 +128,11 @@
                 "IO-Link",
                 "I2C, SPI, UART, JTAG/SWD",
                 "FANUC and ABB robot I/O integration",
-                "72-line LVCMOS25 parallel capture at 50 MHz DDR"
+                "72-line LVCMOS25 parallel capture at 50 MHz DDR",
+                "Isolated IO-Link master (MAX14819) on M12 connectors",
+                "RS-422 and push-pull 24 V encoder interfaces; quadrature counting",
+                "24 V open-collector industrial outputs at 2 A per channel",
+                "Galvanic isolation (ADuM12xx), level shifting (TXS0108), transient protection (SMAJ TVS)"
               ]
             },
             "power": {
@@ -134,7 +142,11 @@
                 "Buck, boost, buck-boost (LT8705A) and LDO trees; power sequencing",
                 "Device-scale UPS modules for industrial controllers",
                 "103 kHz series-series inductive wireless power TX/RX with LTspice models",
-                "IPC-2152 current checks and finite-difference IR-drop review"
+                "IPC-2152 current checks and finite-difference IR-drop review",
+                "Supercapacitor power hold-up with zero-dropout changeover for clean shutdown of single-board computers",
+                "USB-C PD sink controllers (STUSB4500); ideal-diode and PPS front ends taking 8 to 60 V inputs",
+                "42 to 60 V hot-swap inputs for stepper power; 250 W per channel motor supplies",
+                "Sub-millivolt-ripple analog supplies for load-cell front ends; low-ripple boost LED drivers (TPS61181)"
               ]
             },
             "rf_and_analog": {
@@ -142,7 +154,10 @@
                 "Two-channel RF receiver front end: AD8318 log detectors, PE42562 switches, QPL9547 LNA, PE43711 attenuators",
                 "Time-of-flight lidar AFE (AFBR-S50)",
                 "Motor drive: 6EDL7141 gate driver, H-bridge (LM5106), AS5047P magnetic encoder",
-                "Precision environmental sensing (SHT45, BMP585)"
+                "Precision environmental sensing (SHT45, BMP585)",
+                "Stepper drive: TMC262 microstepping at 1/256, 2.8 A RMS per coil",
+                "Load-cell analog front ends repeatable to the ADC specification",
+                "High-power LED drive with digital colour-temperature and brightness control"
               ]
             },
             "sensors": {
@@ -165,7 +180,11 @@
             "HDI and via-in-pad BGA fields (886 x 0.152 mm drills on one board)",
             "Polyimide flex and rigid-flex: 14-board production flex family, 4-layer stackup with coverlay, stiffener and EMI film, generated programmatically and length-matched",
             "Power and wireless-power boards, motor drivers, RF front ends, sensor modules, battery carriers",
-            "2 to 8 copper layers; boards from 24x38 mm flexes to 233x106 mm mainboards"
+            "2 to 8 copper layers; boards from 24x38 mm flexes to 233x106 mm mainboards",
+            "Industrial controller and I/O boards for robot cells: DIN-rail form factors, M8/M12 field connectors, two-part main-plus-front-panel assemblies",
+            "Raspberry Pi CM4 and CM5 carriers and interposers (6-layer, 0.4 mm-pitch BGA, impedance controlled)",
+            "Mezzanine power modules (hot-swappable stepper drivers)",
+            "Single-sided assemblies designed for cost (sub-20 USD assembled boards at 50-unit volumes)"
           ]
         },
         "speeds_and_signal_integrity": {
@@ -203,7 +222,11 @@
             "Domestic and APAC design and EMS partner management; supplier, customs and production troubleshooting; native Mandarin for supplier coordination",
             "JLC/LCSC turnkey release pipelines: readiness checks, BOM/CPL, order packages with SHA-256 manifests",
             "BOM optimization (20 percent subsystem cost cut) and contract harness manufacturing",
-            "Fleet lifecycle: hardware versioning, IQC, provisioning and flashing, revision traceability, field serviceability"
+            "Fleet lifecycle: hardware versioning, IQC, provisioning and flashing, revision traceability, field serviceability",
+            "Field reliability tracking: 72.8k-hour demonstrated MTBF on a 35-unit industrial output board",
+            "Unit-cost ownership: 9.50 to 45 USD assembled boards at 20 to 50 units; 3.5k to 0.8k USD per-system I/O cost reduction",
+            "Fast-turn prototyping: 24 hours from tape-out to fabricated boards",
+            "Impedance-controlled stackups specified to the core (2116x3 resin), 1/0.5 oz and 2/1 oz copper"
           ]
         },
         "eda_tooling_built": {
@@ -370,8 +393,8 @@
       "name": "Firefly automation controller",
       "area": "hardware",
       "year": "2023-2025",
-      "what": "Motherboard for Broadcom/Nexperia-based modules with IO-Link and dual PCIe Gen3 device support; SI-aware PCIe, GbE and USB3 layout on 4 layers. Owned definition, bring-up, manufacture and go-to-market.",
-      "status": "Shipped; self-funded 0.5 to 1k-unit batches (Paisley Microsystems)."
+      "what": "Industrial controller around a Raspberry Pi Compute Module 5 with an STM32H743 co-processor: dual GbE (KSZ9893 switch, LAN7800), 2x USB 3.0 via a CYUSB3304 hub, M.2 B-key and M-key PCIe Gen3 with a PCIe mux and clock buffer, 2x HDMI 2.0, 22-pin MIPI CSI/DSI, isolated dual-channel IO-Link master (MAX14819 with MAX14931/14930 isolators) on M12-5P, USB-C sink and USB-C programming, FTDI UART, ideal-diode PPS front end taking 8 to 60 V to 5 V/5 A and 3.3 V/3 A rails. SI-aware PCIe/GbE/USB3 layout on 4 layers. Owned definition, bring-up, manufacture and go-to-market.",
+      "status": "Shipped; self-funded 0.5 to 1k-unit batches (Paisley Microsystems). Firefly-5 is the current generation; Firefly-4 preceded it."
     },
     {
       "name": "RK3588S compact board",
@@ -381,11 +404,81 @@
       "status": "Brought up."
     },
     {
+      "name": "PCIe to USB 3.0 breakout for Raspberry Pi CM4",
+      "area": "hardware",
+      "year": "2024",
+      "what": "Renesas uPD720201 PCIe-to-USB3 bridge with custom EEPROM config for CM4 kernels; four USB 3.0 ports sharing a 5 Gbps PCIe link, gigabit Ethernet, 20-pin JST I/O, 24 V input, 72 mm DIN-rail profile. 4-layer 1/0.5 oz FR-4, impedance controlled on 2116x3 resin cores. Used for Intel RealSense data collection on robot elbows and end effectors.",
+      "status": "Deployed on production systems (Botbuilt)."
+    },
+    {
+      "name": "24 V digital output board",
+      "area": "hardware",
+      "year": "2024",
+      "what": "16 open-collector 24 V-tolerant outputs at 2 A continuous sink for solenoids, linear motors and contactors from 3.3 V logic. Single-sided 2-layer assembly. 35 units across 5 production lines with one hardware fault in a year: 72.8k hour demonstrated MTBF.",
+      "status": "In production (Botbuilt)."
+    },
+    {
+      "name": "Truss-building arm controller, rev 1 and rev 2",
+      "area": "hardware",
+      "year": "2024-2025",
+      "what": "Four-axis (X, Y, theta, clamp) stepper controller around an STM32F; 1/256 microstepping at over 250 W per channel, electromagnets and break-beam sensors in a hostile-EMI cell. 42 to 60 V hot-swap input, mezzanine motor-driver modules. Rev 2 puts the Raspberry Pi CM4 on board with CM4-IO-standard I/O, Ethernet and USB. 4-layer; rev 2 impedance controlled. 45 USD per unit at 20.",
+      "status": "Deployed (Botbuilt)."
+    },
+    {
+      "name": "Stepper driver mezzanine (TMC262)",
+      "area": "hardware",
+      "year": "2025",
+      "what": "Single bipolar-stepper module, 44 to 60 V, 250 W sustained (2.8 A RMS per coil) with active cooling; rev 2 shrank the module and moved the motor connector on board. 4-layer 2/1 oz. 9.50 USD per unit at 30.",
+      "status": "Deployed (Botbuilt)."
+    },
+    {
+      "name": "Quadrature-to-digital protocol bridge",
+      "area": "hardware",
+      "year": "2024",
+      "what": "Dedicated processor counts delta and direction of four quadrature encoders at once and exposes them over I2C and UART; RS-422 adapter for industrial encoders. 2-layer, low cost, small form factor.",
+      "status": "Deployed (Botbuilt)."
+    },
+    {
+      "name": "IoT workplace storage unit controller",
+      "area": "hardware",
+      "year": "2024",
+      "what": "Wireless module, load-cell analog front end with a sub-0.75 mV ripple regulator at 1.3 MHz, four 12 V pass-through inputs for daisy-chaining, USB-C UART, peak-power scheme for a high-current solenoid. 4-layer. Under 16 USD assembled at 50 units.",
+      "status": "Built (Botbuilt)."
+    },
+    {
+      "name": "CM4 SBC interposer with power hold-up",
+      "area": "hardware",
+      "year": "2024",
+      "what": "Sits between a CM4 and its carrier; supercapacitor bank gives time for a clean shutdown on power loss via a hardware flag, zero-dropout changeover between main and backup supplies. Quad-SPI SD and octal-SPI Samsung eMMC behind a repurposed Ethernet mux, USB-C flashing without a carrier. 6-layer 1/0.5/0.5 oz, impedance controlled, 0.4 mm-pitch BGA. 26.80 USD per unit at 50.",
+      "status": "Deployed (Botbuilt)."
+    },
+    {
+      "name": "High-power LED light ring for computer vision",
+      "area": "hardware",
+      "year": "2024",
+      "what": "4.5 W ring within USB 2.0 power budget, digitally controlled brightness and colour temperature. Rev 1: ATtiny1616 as I2C slave driving the LED driver; rev 2: STM32F4, TPS61181 boost driver, STUSB4500 USB-C PD sink, FT230X UART, potentiometer plus LMC555 manual mode, SWD programming. 2-layer, 88 parts, flush heatsink mounting. Deployed on every production line.",
+      "status": "Deployed (Botbuilt). KiCad source on hand."
+    },
+    {
+      "name": "Truss electronics connection board",
+      "area": "hardware",
+      "year": "2024",
+      "what": "Ordered breakout for the Nucleo-based development truss platform, replacing hundreds of hand-spliced DuPont wires; 1206 parts for hand soldering, 24 hours from tape-out to fabricated boards.",
+      "status": "Built (Botbuilt)."
+    },
+    {
+      "name": "Input Table IO solution",
+      "area": "hardware",
+      "year": "2025",
+      "what": "Two-part DIN-rail assembly (logic main board plus front-panel connector board over a right-angle DIN 41612) reading multiple motor encoders and driving a REAJET industrial printer with push-pull 24 V encoder signals; ADuM1201 isolation, TXS0108 level shifting, ULN2002 and L293 drivers, SMAJ26A transient protection, M8 and M12 field connectors, Nucleo-F410 processor. 4-layer, 90 parts. Replaced 3.5k USD of off-the-shelf industrial I/O per system with under 0.8k USD across 5 lines.",
+      "status": "Deployed (Botbuilt). KiCad source on hand."
+    },
+    {
       "name": "NVIDIA Orin carrier",
       "area": "hardware",
       "year": "2024",
       "what": "Custom carrier resolving sensor-bandwidth bottlenecks for on-robot AI processing on FANUC/ABB truss-assembly lines.",
-      "status": "Deployed."
+      "status": "Deployed (Botbuilt)."
     },
     {
       "name": "Kintex-7 capture board",
