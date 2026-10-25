@@ -17,7 +17,12 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
 <link rel="apple-touch-icon" href="/assets/icon-180.png">
-<meta property="og:image" content="https://matthewguo.me/assets/icon-512.png">
+<meta property="og:image" content="https://matthewguo.me/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Matthew Guo">
+<meta name="twitter:image" content="https://matthewguo.me/assets/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
@@ -85,6 +90,11 @@
   @keyframes fill { 0% { transform:scaleX(0); opacity:1; } 35% { transform:scaleX(1); opacity:1; } 100% { transform:scaleX(1); opacity:0; } }
   @media (max-width:480px) { .mcp-row { grid-template-columns:repeat(7, 1fr); } .mcp-row .k { display:none; } }
   @media (prefers-reduced-motion:reduce) { .mcp-bar.go i { animation:none; transform:scaleX(1); opacity:1; } }
+  .humans { margin:18px 0 0; font-family:var(--font-display); font-size:13px; display:flex; align-items:center; gap:14px; color:var(--muted-3); }
+  .humans .k { letter-spacing:.08em; text-transform:uppercase; font-size:11px; }
+  .humans a { color:var(--muted-1); padding-bottom:1px; border-bottom:1px solid var(--line); }
+  .humans a:hover { color:var(--sakura); border-color:currentColor; }
+  .humans .dot { color:var(--line); }
   footer { padding:18px 0 24px; border-top:1px solid var(--line-soft); font-size:12px; color:var(--muted-3); }
 </style>
 </head>
@@ -120,6 +130,7 @@
       </div>
       <div class="mcp-bar" id="mcp-bar"><i></i></div>
     </div>
+    <p class="humans"><span class="k">For humans</span><a href="/humans">Profile</a><span class="dot">·</span><a href="/contact">Message</a><span class="dot">·</span><a href="/call">Book a call</a></p>
   </main>
   <footer>© 2026 Matthew Guo</footer>
 </div>
